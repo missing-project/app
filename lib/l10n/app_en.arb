@@ -1,0 +1,29 @@
+{
+  "title": "title",
+  "logo": "missing",
+  "greeting": "Thank you for {count} visit!",
+  "@greeting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "section": "case",
+  "id": "id",
+  "password": "password",
+  "passwordCheck": "password check",
+  "login_input_valid": "Please enter some text",
+  "login_password_valid": "Please enter some text",
+  "login_button": "Login",
+  "login_authInquiry": "ID, pw search",
+  "login_signup": "signup",
+  "profile_login": "you need to login",
+  "profile_alarm": "alarm",
+  "profile_report": "report",
+  "profile_setting": "setting",
+  "profile_inquiry": "inquiry",
+  "signup_id_invalid": "Please enter some text",
+  "signup_pw_invalid": "Please enter some text",
+  "signup_pwCh_invalid": "password values are different"
+}

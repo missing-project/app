@@ -1,0 +1,29 @@
+{
+  "title": "제목",
+  "logo": "missing",
+  "greeting": "{count}번째 방문, 감사합니다!",
+  "@greeting": {
+    "placeholders": {
+      "count": {
+        "type": "Int"
+      }
+    }
+  },
+  "section": "사건",
+  "id": "아이디",
+  "password": "비밀번호",
+  "passwordCheck": "비밀번호 확인",
+  "login_input_valid": "아이디를 입력하시오",
+  "login_password_valid": "비밀번호를 입력하시오",
+  "login_button": "로그인",
+  "login_authInquiry": "ID, 비밀번호 찾기",
+  "login_signup": "회원가입",
+  "profile_login": "로그인 하기",
+  "profile_alarm": "알림 관리",
+  "profile_report": "신고 관리",
+  "profile_setting": "설정",
+  "profile_inquiry": "문의",
+  "signup_id_invalid": "아이디를 입력하시오",
+  "signup_pw_invalid": "비밀번호를 입력하시오",
+  "signup_pwCh_invalid": "비밀번호가 다릅니다"
+}
