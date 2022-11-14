@@ -20,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String password = '';
   String passwordCheck = '';
   String email = '';
-  bool emaiAuthrization = false;
+  bool emailAuthrization = false;
   bool termsAgreement = false;
   bool isButtonActive = false;
 
