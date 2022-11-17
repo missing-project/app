@@ -35,14 +35,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final double horizontalPadding = MediaQuery.of(context).size.width / 15;
         final List<Map<Property, dynamic>> items = [
           {
-            Property.name: AppLocalizations.of(context)!.profile_alarm,
-            Property.isActive: isLogged,
-            Property.pushNamed: Routes.alarm,
-          },
-          {
-            Property.name: AppLocalizations.of(context)!.profile_report,
-            Property.isActive: isLogged,
-            Property.pushNamed: Routes.report,
+            Property.name: AppLocalizations.of(context)!.profile_notice,
+            Property.isActive: true,
+            Property.pushNamed: Routes.setting,
           },
           {
             Property.name: AppLocalizations.of(context)!.profile_setting,

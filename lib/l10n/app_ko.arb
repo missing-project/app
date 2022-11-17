@@ -21,6 +21,8 @@
   "profile_login": "로그인 하기",
   "profile_alarm": "알림 관리",
   "profile_report": "신고 관리",
+  "profile_myinfo": "계정 관리",
+  "profile_notice": "공지사항",
   "profile_setting": "설정",
   "profile_inquiry": "문의",
   "signup_id_invalid": "아이디를 입력하시오",

@@ -21,6 +21,8 @@
   "profile_login": "you need to login",
   "profile_alarm": "alarm",
   "profile_report": "report",
+  "profile_myinfo": "profile",
+  "profile_notice": "notice",
   "profile_setting": "setting",
   "profile_inquiry": "inquiry",
   "signup_id_invalid": "Please enter some text",
