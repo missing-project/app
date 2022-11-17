@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.17.0
   flutter_native_splash: ^2.2.8
   google_maps_flutter: ^2.2.1
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
