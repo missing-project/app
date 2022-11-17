@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:missing_application/components/appbar/slide_appbar.dart';
 import 'package:missing_application/screens/landing/wigets/bookmark/bookmark_screen.dart';
 import 'package:missing_application/screens/landing/wigets/home/home_screen.dart';
 import 'package:missing_application/screens/landing/wigets/map/map_screen.dart';
@@ -49,9 +48,8 @@ class _LandingScreenState extends State<LandingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SlidingAppbar(
-        isMap: _selectedIndex == 1,
-        controller: _animationController,
+      appBar: PreferredSize(
+        preferredSize: _selectedIndex == 1 ? Size.zero : Size.fromHeight(40.0),
         child: AppBar(
           title: Text(_title[_selectedIndex]),
           centerTitle: false,
