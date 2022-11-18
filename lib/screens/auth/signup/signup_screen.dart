@@ -44,6 +44,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       idUsable = value;
     });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(
+            value
+                ? AppLocalizations.of(context)!.signup_id_duplicate_possible
+                : AppLocalizations.of(context)!.signup_id_duplicate_impossible,
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context)!.check),
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override

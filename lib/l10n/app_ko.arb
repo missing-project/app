@@ -9,6 +9,7 @@
       }
     }
   },
+  "check": "확인",
   "section": "사건",
   "id": "아이디",
   "password": "비밀번호",
@@ -30,6 +31,8 @@
   "signup_pw_regex": "대소문자, 숫자, 특수기호를 포함하여 8자 이상이어야 합니다",
   "signup_pwCh_invalid": "비밀번호가 다릅니다",
   "signup_id_duplicate_btn": "중복 검사",
+  "signup_id_duplicate_possible": "사용 가능",
+  "signup_id_duplicate_impossible": "사용 불가능",
   "signup_email": "이메일",
   "signup_authrization": "인증",
   "signup_terms": "Hello",
