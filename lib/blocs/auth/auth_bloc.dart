@@ -11,15 +11,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>(_onLoading);
     on<Login>(_onLogin);
+    on<IdCheck>(_idCheck);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
       emit(AuthLoading());
 
-  Future<void> _onLogin(AuthEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onLogin(Login event, Emitter<AuthState> emit) async {
     try {
       await repository.signIn();
       return emit(AuthLoaded(repository.currentUser));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _idCheck(IdCheck event, Emitter<AuthState> emit) async {
+    try {
+      final isUsable = await repository.idCheck(event.id);
+      return emit(AuthIdCheck(isUsable));
     } catch (err) {
       return emit(AuthError(err));
     }

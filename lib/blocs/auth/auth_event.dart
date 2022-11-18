@@ -27,3 +27,9 @@ class Signup extends AuthEvent {
     required this.password,
   });
 }
+
+class IdCheck extends AuthEvent {
+  final String id;
+
+  IdCheck({required this.id});
+}
