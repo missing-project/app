@@ -33,3 +33,9 @@ class IdCheck extends AuthEvent {
 
   IdCheck({required this.id});
 }
+
+class EmailCheck extends AuthEvent {
+  final String email;
+
+  EmailCheck({required this.email});
+}

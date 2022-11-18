@@ -25,3 +25,8 @@ class AuthIdCheck extends AuthState {
   final bool isUsable;
   AuthIdCheck(this.isUsable);
 }
+
+class AuthEmailCheck extends AuthState {
+  final String code;
+  AuthEmailCheck(this.code);
+}

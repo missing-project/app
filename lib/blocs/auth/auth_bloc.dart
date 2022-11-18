@@ -12,6 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>(_onLoading);
     on<Login>(_onLogin);
     on<IdCheck>(_idCheck);
+    on<EmailCheck>(_emailCheck);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -30,6 +31,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isUsable = await repository.idCheck(event.id);
       return emit(AuthIdCheck(isUsable));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _emailCheck(EmailCheck event, Emitter<AuthState> emit) async {
+    try {
+      final code = await repository.emailCheck(event.email);
+      return emit(AuthEmailCheck(code));
     } catch (err) {
       return emit(AuthError(err));
     }

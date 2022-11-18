@@ -1,6 +1,11 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:missing_application/models/auth_model.dart';
+import 'package:missing_application/services/auth_service.dart';
+
+class AuthEndPoint {
+  static String get signIn => '/';
+  static String get idCheck => '/albums/1';
+  static String get emailCheck => '/albums/1';
+}
 
 class AuthRepository {
   User currentUser = User.empty;
@@ -13,14 +18,12 @@ class AuthRepository {
   }
 
   Future<bool> idCheck(String id) async {
-    final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+    final rsp = await AuthService.checkIdDuplicate();
+    return rsp['id'] == 1;
+  }
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final rsp = jsonDecode(response.body);
-      return rsp['id'] == 1;
-    } else {
-      throw Exception('Failed to load album');
-    }
+  Future<String> emailCheck(String email) async {
+    final rsp = await AuthService.checkEmailAuthrization();
+    return rsp['id'];
   }
 }
