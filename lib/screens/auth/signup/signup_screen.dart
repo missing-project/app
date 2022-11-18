@@ -22,7 +22,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String email = '';
   bool emailAuthrization = false;
   bool termsAgreement = false;
-  bool isButtonActive = false;
 
   String? get _errorText {
     if (_pwFocusNode.hasFocus && !regex.hasMatch(password)) {
@@ -44,81 +43,125 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: ListView(
-                    children: [
-                      TextFormField(
-                        obscureText: false,
-                        onChanged: ((value) {
-                          setState(() {
-                            id = value;
-                          });
-                        }),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.id,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: ListView(
+                      children: [
+                        SignUpPadding(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormFieldStyle(
+                                  obscure: false,
+                                  label: AppLocalizations.of(context)!.id,
+                                  onChanged: ((value) {
+                                    setState(() {
+                                      id = value;
+                                    });
+                                  }),
+                                  validator: (value) {
+                                    return value == null || value.isEmpty
+                                        ? AppLocalizations.of(context)!
+                                            .signup_id_invalid
+                                        : null;
+                                  },
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text('중복 검사'),
+                              ),
+                            ],
+                          ),
                         ),
-                        validator: (value) {
-                          return value == null || value.isEmpty
-                              ? AppLocalizations.of(context)!.signup_id_invalid
-                              : null;
-                        },
-                      ),
-                      TextFormField(
-                        obscureText: false,
-                        focusNode: _pwFocusNode,
-                        onChanged: ((value) {
-                          setState(() {
-                            password = value;
-                          });
-                        }),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.password,
-                          errorText: _errorText,
+                        SignUpPadding(
+                          child: TextFormFieldStyle(
+                            obscure: false,
+                            label: AppLocalizations.of(context)!.password,
+                            errorTxt: _errorText,
+                            focusNode: _pwFocusNode,
+                            onChanged: ((value) {
+                              setState(() {
+                                password = value;
+                              });
+                            }),
+                            validator: (value) {
+                              return value == null ||
+                                      value.isEmpty ||
+                                      !regex.hasMatch(value)
+                                  ? AppLocalizations.of(context)!
+                                      .signup_pw_invalid
+                                  : null;
+                            },
+                          ),
                         ),
-                        validator: (value) {
-                          return value == null ||
-                                  value.isEmpty ||
-                                  !regex.hasMatch(value)
-                              ? AppLocalizations.of(context)!.signup_pw_invalid
-                              : null;
-                        },
-                      ),
-                      TextFormField(
-                        obscureText: false,
-                        focusNode: _pwChFocusNode,
-                        onChanged: ((value) {
-                          setState(() {
-                            passwordCheck = value;
-                          });
-                        }),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText:
-                              AppLocalizations.of(context)!.passwordCheck,
-                          errorText: _pwChFocusNode.hasFocus &&
-                                  password != passwordCheck
-                              ? AppLocalizations.of(context)!
-                                  .signup_pwCh_invalid
-                              : null,
+                        SignUpPadding(
+                          child: TextFormFieldStyle(
+                            obscure: false,
+                            label: AppLocalizations.of(context)!.passwordCheck,
+                            errorTxt: _pwChFocusNode.hasFocus &&
+                                    password != passwordCheck
+                                ? AppLocalizations.of(context)!
+                                    .signup_pwCh_invalid
+                                : null,
+                            focusNode: _pwChFocusNode,
+                            onChanged: ((value) {
+                              setState(() {
+                                passwordCheck = value;
+                              });
+                            }),
+                            validator: (value) {
+                              return value == null ||
+                                      value.isEmpty ||
+                                      password != passwordCheck
+                                  ? AppLocalizations.of(context)!
+                                      .signup_pwCh_invalid
+                                  : null;
+                            },
+                          ),
                         ),
-                        validator: (value) {
-                          return value == null ||
-                                  value.isEmpty ||
-                                  password != passwordCheck
-                              ? AppLocalizations.of(context)!
-                                  .signup_pwCh_invalid
-                              : null;
-                        },
-                      ),
-                      Checkbox(
-                          value: termsAgreement,
-                          onChanged: (value) {
-                            setState(() {
-                              termsAgreement = value!;
-                            });
-                          })
-                    ],
+                        SignUpPadding(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormFieldStyle(
+                                  obscure: false,
+                                  label: '이메일',
+                                  onChanged: (value) {
+                                    setState(() {
+                                      email = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text('인증'),
+                              )
+                            ],
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Hello',
+                            style: DefaultTextStyle.of(context).style,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: termsAgreement,
+                              onChanged: (value) {
+                                setState(() {
+                                  termsAgreement = value!;
+                                });
+                              },
+                            ),
+                            Text('약관에 동의 합니다')
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -140,6 +183,67 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ],
             ),
           )),
+    );
+  }
+}
+
+class SignUpPadding extends StatefulWidget {
+  const SignUpPadding({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  State<SignUpPadding> createState() => _SignUpPaddingState();
+}
+
+class _SignUpPaddingState extends State<SignUpPadding> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: widget.child,
+    );
+  }
+}
+
+class TextFormFieldStyle extends StatefulWidget {
+  const TextFormFieldStyle({
+    super.key,
+    required this.obscure,
+    required this.onChanged,
+    required this.label,
+    this.focusNode,
+    this.validator,
+    this.errorTxt,
+  });
+
+  final bool obscure;
+  final FocusNode? focusNode;
+  final void Function(String) onChanged;
+  final String? Function(String?)? validator;
+  final String label;
+  final String? errorTxt;
+
+  @override
+  State<TextFormFieldStyle> createState() => _TextFormFieldStyleState();
+}
+
+class _TextFormFieldStyleState extends State<TextFormFieldStyle> {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      obscureText: widget.obscure,
+      focusNode: widget.focusNode,
+      onChanged: widget.onChanged,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: widget.label,
+        errorText: widget.errorTxt,
+      ),
+      validator: widget.validator,
     );
   }
 }
