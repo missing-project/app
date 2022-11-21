@@ -17,8 +17,8 @@ class _SignUpPaddingState extends State<SignUpPadding> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: widget.child,
+      padding: EdgeInsets.only(bottom: 20),
+      child: SizedBox(height: 50, child: widget.child),
     );
   }
 }

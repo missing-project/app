@@ -41,5 +41,6 @@
   "signup_emailCode_send": "Verification code sent",
   "signup_emailCode_correct": "certified",
   "signup_emailCode_incorrect": "doesn't match",
-  "signup_emailCode_input": "Enter verification code"
+  "signup_emailCode_input": "Enter verification code",
+  "signup_email_regExp": "Please respect the email format"
 }

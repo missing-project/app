@@ -17,8 +17,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _pwFocusNode = FocusNode();
   final _pwChFocusNode = FocusNode();
-  RegExp regex =
+  RegExp passwordRegex =
       RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+  RegExp emailRegExp = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   String id = '';
   String password = '';
   String passwordCheck = '';
@@ -29,8 +31,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool emailAuthrizationCheck = false;
   bool termsAgreement = false;
 
-  String? get _errorText {
-    if (_pwFocusNode.hasFocus && !regex.hasMatch(password)) {
+  String? get _passwordErrorText {
+    if (_pwFocusNode.hasFocus && !passwordRegex.hasMatch(password)) {
       return AppLocalizations.of(context)!.signup_pw_regex;
     }
 
@@ -60,8 +62,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _handleEmailCheck() {
-    if (email.isNotEmpty) {
+    if (email.isNotEmpty && emailRegExp.hasMatch(email)) {
       BlocProvider.of<AuthBloc>(context).add(EmailCheck(email: email));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: AppLocalizations.of(context)!.signup_email_regExp,
+          );
+        },
+      );
     }
   }
 
@@ -93,6 +104,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
         });
   }
+
+  void _handleSignupSubmit() {}
 
   @override
   Widget build(BuildContext context) {
@@ -134,10 +147,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 },
                               ),
                             ),
-                            TextButton(
-                              onPressed: _handleIdCheck,
-                              child: Text(AppLocalizations.of(context)!
-                                  .signup_id_duplicate_btn),
+                            SizedBox(
+                              height: double.infinity,
+                              child: TextButton(
+                                onPressed: _handleIdCheck,
+                                child: Text(AppLocalizations.of(context)!
+                                    .signup_id_duplicate_btn),
+                              ),
                             ),
                           ],
                         ),
@@ -146,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: TextFormFieldStyle(
                           obscure: false,
                           label: AppLocalizations.of(context)!.password,
-                          errorTxt: _errorText,
+                          errorTxt: _passwordErrorText,
                           focusNode: _pwFocusNode,
                           onChanged: ((value) {
                             setState(() {
@@ -156,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (value) {
                             return value == null ||
                                     value.isEmpty ||
-                                    !regex.hasMatch(value)
+                                    !passwordRegex.hasMatch(value)
                                 ? AppLocalizations.of(context)!
                                     .signup_pw_invalid
                                 : null;
@@ -207,15 +223,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 },
                               ),
                             ),
-                            TextButton(
-                              onPressed: emailAuthrizationCheck
-                                  ? null
-                                  : _handleEmailCheck,
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .signup_authrization,
+                            SizedBox(
+                              height: double.infinity,
+                              child: TextButton(
+                                onPressed: emailAuthrizationCheck
+                                    ? null
+                                    : _handleEmailCheck,
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .signup_authrization,
+                                ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -275,14 +294,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: termsAgreement && _formKey.currentState!.validate()
-                      ? () {}
+                      ? _handleSignupSubmit
                       : null,
-                  style: TextButton.styleFrom(
-                    disabledBackgroundColor: Colors.grey[100],
-                    disabledForegroundColor: Colors.black,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                  ),
                   child: Text(AppLocalizations.of(context)!.signup_btn),
                 ),
               ),
