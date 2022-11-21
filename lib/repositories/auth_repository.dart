@@ -23,7 +23,7 @@ class AuthRepository {
   }
 
   Future<String> emailCheck(String email) async {
-    final rsp = await AuthService.checkEmailAuthrization();
-    return rsp['id'];
+    final rsp = await AuthService.sendEmailAuthizationCode();
+    return rsp['id'].toString();
   }
 }

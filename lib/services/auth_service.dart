@@ -5,7 +5,7 @@ import 'package:missing_application/config.dart';
 class AuthService {
   static String signIn = '/';
   static String idCheck = '/albums/1';
-  static String emailCheck = '/albums/1';
+  static String emailCheck = '/albums/2';
 
   static Future checkIdDuplicate() async {
     final response = await http.get(Uri.parse('${Config.serverUrl}$idCheck'));
@@ -16,7 +16,7 @@ class AuthService {
     }
   }
 
-  static Future checkEmailAuthrization() async {
+  static Future sendEmailAuthizationCode() async {
     final response =
         await http.get(Uri.parse('${Config.serverUrl}$emailCheck'));
     if (response.statusCode == 200 || response.statusCode == 201) {

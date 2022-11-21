@@ -22,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String password = '';
   String passwordCheck = '';
   String email = '';
+  String emailAuthrizationCode = '';
   bool idUsable = false;
   bool emailAuthrization = false;
   bool termsAgreement = false;
@@ -47,22 +48,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          content: Text(
-            value
-                ? AppLocalizations.of(context)!.signup_id_duplicate_possible
-                : AppLocalizations.of(context)!.signup_id_duplicate_impossible,
-            textAlign: TextAlign.center,
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(AppLocalizations.of(context)!.check),
-            )
-          ],
+        return AlertDialogCustom(
+          content: value
+              ? AppLocalizations.of(context)!.signup_id_duplicate_possible
+              : AppLocalizations.of(context)!.signup_id_duplicate_impossible,
         );
+      },
+    );
+  }
+
+  void _handleEmailCheck() {
+    if (email.isNotEmpty) {
+      BlocProvider.of<AuthBloc>(context).add(EmailCheck(email: email));
+    }
+  }
+
+  void _emailCheckState(String code) {
+    setState(() {
+      emailAuthrizationCode = code;
+    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialogCustom(content: '인증 코드가 전송되었습니다');
       },
     );
   }
@@ -76,6 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Navigator.pop(context);
         },
         idCheck: _idCheckState,
+        emailCheck: _emailCheckState,
         child: Form(
           key: _formKey,
           child: Column(
@@ -166,6 +175,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Expanded(
                               child: TextFormFieldStyle(
                                 obscure: false,
+                                readOnly: emailAuthrizationCode.isNotEmpty,
                                 label:
                                     AppLocalizations.of(context)!.signup_email,
                                 onChanged: (value) {
@@ -176,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: _handleEmailCheck,
                               child: Text(AppLocalizations.of(context)!
                                   .signup_authrization),
                             )
@@ -260,6 +270,7 @@ class TextFormFieldStyle extends StatefulWidget {
     this.focusNode,
     this.validator,
     this.errorTxt,
+    this.readOnly = false,
   });
 
   final bool obscure;
@@ -268,6 +279,7 @@ class TextFormFieldStyle extends StatefulWidget {
   final String? Function(String?)? validator;
   final String label;
   final String? errorTxt;
+  final bool readOnly;
 
   @override
   State<TextFormFieldStyle> createState() => _TextFormFieldStyleState();
@@ -277,15 +289,52 @@ class _TextFormFieldStyleState extends State<TextFormFieldStyle> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.readOnly,
       obscureText: widget.obscure,
       focusNode: widget.focusNode,
       onChanged: widget.onChanged,
       decoration: InputDecoration(
+        enabled: !widget.readOnly,
         border: OutlineInputBorder(),
         labelText: widget.label,
         errorText: widget.errorTxt,
       ),
+      style: TextStyle(
+        fontStyle: widget.readOnly ? FontStyle.italic : FontStyle.normal,
+      ),
       validator: widget.validator,
+    );
+  }
+}
+
+class AlertDialogCustom extends StatefulWidget {
+  const AlertDialogCustom({
+    super.key,
+    required this.content,
+  });
+
+  final String content;
+
+  @override
+  State<AlertDialogCustom> createState() => _AlertDialogCustomState();
+}
+
+class _AlertDialogCustomState extends State<AlertDialogCustom> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Text(
+        widget.content,
+        textAlign: TextAlign.center,
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(AppLocalizations.of(context)!.check),
+        )
+      ],
     );
   }
 }
