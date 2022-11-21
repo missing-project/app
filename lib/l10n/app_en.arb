@@ -37,5 +37,9 @@
   "signup_authrization": "authrization",
   "signup_terms": "Hello",
   "signup_terms_agree": "I gree",
-  "signup_btn": "Sign Up"
+  "signup_btn": "Sign Up",
+  "signup_emailCode_send": "Verification code sent",
+  "signup_emailCode_correct": "certified",
+  "signup_emailCode_incorrect": "doesn't match",
+  "signup_emailCode_input": "Enter verification code"
 }

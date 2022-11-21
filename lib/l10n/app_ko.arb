@@ -37,5 +37,9 @@
   "signup_authrization": "인증",
   "signup_terms": "Hello",
   "signup_terms_agree": "약관에 동의 합니다",
-  "signup_btn": "회원가입"
+  "signup_btn": "회원가입",
+  "signup_emailCode_send": "인증 코드가 전송되었습니다",
+  "signup_emailCode_correct": "인증되었습니다",
+  "signup_emailCode_incorrect": "일치하지 않습니다",
+  "signup_emailCode_input": "인증코드 입력"
 }

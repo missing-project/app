@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/screens/auth/signup/widgets/signup_widgets.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
 import 'package:missing_application/screens/global/global_appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,8 +24,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String passwordCheck = '';
   String email = '';
   String emailAuthrizationCode = '';
+  String emailCodeInputValue = '';
   bool idUsable = false;
-  bool emailAuthrization = false;
+  bool emailAuthrizationCheck = false;
   bool termsAgreement = false;
 
   String? get _errorText {
@@ -70,9 +72,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialogCustom(content: '인증 코드가 전송되었습니다');
+        return AlertDialogCustom(
+            content: AppLocalizations.of(context)!.signup_emailCode_send);
       },
     );
+  }
+
+  void _emailCodeCheck() {
+    bool isCorrect = (emailAuthrizationCode == emailCodeInputValue);
+    setState(() {
+      emailAuthrizationCheck = isCorrect;
+    });
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: isCorrect
+                ? AppLocalizations.of(context)!.signup_emailCode_correct
+                : AppLocalizations.of(context)!.signup_emailCode_incorrect,
+          );
+        });
   }
 
   @override
@@ -176,6 +195,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: TextFormFieldStyle(
                                 obscure: false,
                                 readOnly: emailAuthrizationCode.isNotEmpty,
+                                suffixIcon: emailAuthrizationCheck
+                                    ? Icon(Icons.check, color: Colors.green)
+                                    : null,
                                 label:
                                     AppLocalizations.of(context)!.signup_email,
                                 onChanged: (value) {
@@ -186,13 +208,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             TextButton(
-                              onPressed: _handleEmailCheck,
-                              child: Text(AppLocalizations.of(context)!
-                                  .signup_authrization),
+                              onPressed: emailAuthrizationCheck
+                                  ? null
+                                  : _handleEmailCheck,
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .signup_authrization,
+                              ),
                             )
                           ],
                         ),
                       ),
+                      emailAuthrizationCode.isNotEmpty &&
+                              !emailAuthrizationCheck
+                          ? SignUpPadding(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          emailCodeInputValue = value;
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        border: UnderlineInputBorder(),
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .signup_emailCode_input),
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: _emailCodeCheck,
+                                    child: Text(
+                                        AppLocalizations.of(context)!.check),
+                                  )
+                                ],
+                              ),
+                            )
+                          : SizedBox(),
                       RichText(
                         text: TextSpan(
                           text: AppLocalizations.of(context)!.signup_terms,
@@ -235,106 +290,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SignUpPadding extends StatefulWidget {
-  const SignUpPadding({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  State<SignUpPadding> createState() => _SignUpPaddingState();
-}
-
-class _SignUpPaddingState extends State<SignUpPadding> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: widget.child,
-    );
-  }
-}
-
-class TextFormFieldStyle extends StatefulWidget {
-  const TextFormFieldStyle({
-    super.key,
-    required this.obscure,
-    required this.onChanged,
-    required this.label,
-    this.focusNode,
-    this.validator,
-    this.errorTxt,
-    this.readOnly = false,
-  });
-
-  final bool obscure;
-  final FocusNode? focusNode;
-  final void Function(String) onChanged;
-  final String? Function(String?)? validator;
-  final String label;
-  final String? errorTxt;
-  final bool readOnly;
-
-  @override
-  State<TextFormFieldStyle> createState() => _TextFormFieldStyleState();
-}
-
-class _TextFormFieldStyleState extends State<TextFormFieldStyle> {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      readOnly: widget.readOnly,
-      obscureText: widget.obscure,
-      focusNode: widget.focusNode,
-      onChanged: widget.onChanged,
-      decoration: InputDecoration(
-        enabled: !widget.readOnly,
-        border: OutlineInputBorder(),
-        labelText: widget.label,
-        errorText: widget.errorTxt,
-      ),
-      style: TextStyle(
-        fontStyle: widget.readOnly ? FontStyle.italic : FontStyle.normal,
-      ),
-      validator: widget.validator,
-    );
-  }
-}
-
-class AlertDialogCustom extends StatefulWidget {
-  const AlertDialogCustom({
-    super.key,
-    required this.content,
-  });
-
-  final String content;
-
-  @override
-  State<AlertDialogCustom> createState() => _AlertDialogCustomState();
-}
-
-class _AlertDialogCustomState extends State<AlertDialogCustom> {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Text(
-        widget.content,
-        textAlign: TextAlign.center,
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(AppLocalizations.of(context)!.check),
-        )
-      ],
     );
   }
 }
