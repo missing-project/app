@@ -27,6 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String email = '';
   String emailAuthrizationCode = '';
   String emailCodeInputValue = '';
+  bool passwordVisible = false;
+  bool passwordCheckVisible = false;
   bool idUsable = false;
   bool emailAuthrizationCheck = false;
   bool termsAgreement = false;
@@ -42,6 +44,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _handleIdCheck() {
     if (id.isNotEmpty) {
       BlocProvider.of<AuthBloc>(context).add(IdCheck(id: id));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: AppLocalizations.of(context)!.signup_id_invalid,
+          );
+        },
+      );
     }
   }
 
@@ -128,31 +139,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: ListView(
                     children: [
                       SignUpPadding(
-                        child: Row(
+                        child: RowWithHeight(
                           children: [
                             Expanded(
                               child: TextFormFieldStyle(
                                 obscure: false,
+                                readOnly: idUsable,
+                                suffixIcon: idUsable
+                                    ? Icon(
+                                        Icons.check,
+                                        color: Colors.green,
+                                      )
+                                    : null,
                                 label: AppLocalizations.of(context)!.id,
                                 onChanged: ((value) {
                                   setState(() {
                                     id = value;
                                   });
                                 }),
-                                validator: (value) {
-                                  return value == null || value.isEmpty
-                                      ? AppLocalizations.of(context)!
-                                          .signup_id_invalid
-                                      : null;
-                                },
                               ),
                             ),
                             SizedBox(
                               height: double.infinity,
-                              child: TextButton(
-                                onPressed: _handleIdCheck,
-                                child: Text(AppLocalizations.of(context)!
-                                    .signup_id_duplicate_btn),
+                              child: ElevatedButton(
+                                onPressed: idUsable ? null : _handleIdCheck,
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .signup_id_duplicate_btn,
+                                ),
                               ),
                             ),
                           ],
@@ -160,7 +174,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SignUpPadding(
                         child: TextFormFieldStyle(
-                          obscure: false,
+                          obscure: !passwordVisible,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                            icon: Icon(
+                              passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
                           label: AppLocalizations.of(context)!.password,
                           errorTxt: _passwordErrorText,
                           focusNode: _pwFocusNode,
@@ -181,7 +207,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SignUpPadding(
                         child: TextFormFieldStyle(
-                          obscure: false,
+                          obscure: !passwordCheckVisible,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                passwordCheckVisible = !passwordCheckVisible;
+                              });
+                            },
+                            icon: Icon(
+                              passwordCheckVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
                           label: AppLocalizations.of(context)!.passwordCheck,
                           errorTxt: _pwChFocusNode.hasFocus &&
                                   password != passwordCheck
@@ -205,7 +243,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       SignUpPadding(
-                        child: Row(
+                        child: RowWithHeight(
                           children: [
                             Expanded(
                               child: TextFormFieldStyle(
@@ -225,7 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             SizedBox(
                               height: double.infinity,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 onPressed: emailAuthrizationCheck
                                     ? null
                                     : _handleEmailCheck,
@@ -292,7 +330,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: termsAgreement && _formKey.currentState!.validate()
                       ? _handleSignupSubmit
                       : null,

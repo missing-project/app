@@ -26,14 +26,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
           fontFamily: 'ChosunGs',
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              disabledBackgroundColor: Colors.grey[100],
-              disabledForegroundColor: Colors.grey[600],
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-            ),
-          ),
+          // elevatedButtonTheme: ElevatedButtonThemeData(
+          //   style: ElevatedButton.styleFrom(
+          //     disabledBackgroundColor: Colors.grey[100],
+          //     disabledForegroundColor: Colors.grey[600],
+          //     backgroundColor: Theme.of(context).primaryColor,
+          //     foregroundColor: Colors.white,
+          //   ),
+          // ),
         ),
         initialRoute: '/',
         routes: routes,

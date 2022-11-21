@@ -87,11 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: TextButton(
+                  child: ElevatedButton(
                     onPressed: _handleLoginBtn,
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
                     child: Text(
                       AppLocalizations.of(context)!.login_button,
                       style: TextStyle(

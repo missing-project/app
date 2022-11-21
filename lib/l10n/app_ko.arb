@@ -27,7 +27,7 @@
   "profile_setting": "설정",
   "profile_inquiry": "문의",
   "signup_id_invalid": "아이디를 입력하시오",
-  "signup_pw_invalid": "비밀번호를 입력하시오",
+  "signup_pw_invalid": "비밀번호가 유효하지 않습니다",
   "signup_pw_regex": "대소문자, 숫자, 특수기호를 포함하여 8자 이상이어야 합니다",
   "signup_pwCh_invalid": "비밀번호가 다릅니다",
   "signup_id_duplicate_btn": "중복 검사",

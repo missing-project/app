@@ -27,7 +27,7 @@
   "profile_setting": "setting",
   "profile_inquiry": "inquiry",
   "signup_id_invalid": "Please enter some text",
-  "signup_pw_invalid": "Please enter some text",
+  "signup_pw_invalid": "Password is invalid",
   "signup_pw_regex": "Must be at least 8 characters including uppercase and lowercase letters, numbers and special symbols",
   "signup_pwCh_invalid": "password values are different",
   "signup_id_duplicate_btn": "duplicate check",

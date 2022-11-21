@@ -1,28 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SignUpPadding extends StatefulWidget {
-  const SignUpPadding({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  State<SignUpPadding> createState() => _SignUpPaddingState();
-}
-
-class _SignUpPaddingState extends State<SignUpPadding> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 20),
-      child: SizedBox(height: 50, child: widget.child),
-    );
-  }
-}
-
 class TextFormFieldStyle extends StatefulWidget {
   const TextFormFieldStyle({
     super.key,
@@ -72,24 +50,34 @@ class _TextFormFieldStyleState extends State<TextFormFieldStyle> {
   }
 }
 
-class AlertDialogCustom extends StatefulWidget {
+class SignUpPadding extends StatelessWidget {
+  const SignUpPadding({
+    super.key,
+    required this.child,
+  });
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: child,
+    );
+  }
+}
+
+class AlertDialogCustom extends StatelessWidget {
   const AlertDialogCustom({
     super.key,
     required this.content,
   });
-
   final String content;
 
-  @override
-  State<AlertDialogCustom> createState() => _AlertDialogCustomState();
-}
-
-class _AlertDialogCustomState extends State<AlertDialogCustom> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Text(
-        widget.content,
+        content,
         textAlign: TextAlign.center,
       ),
       actions: <Widget>[
@@ -100,6 +88,21 @@ class _AlertDialogCustomState extends State<AlertDialogCustom> {
           child: Text(AppLocalizations.of(context)!.check),
         )
       ],
+    );
+  }
+}
+
+class RowWithHeight extends StatelessWidget {
+  const RowWithHeight({super.key, required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Row(
+        children: children,
+      ),
     );
   }
 }
