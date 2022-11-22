@@ -70,8 +70,10 @@ class AlertDialogCustom extends StatelessWidget {
   const AlertDialogCustom({
     super.key,
     required this.content,
+    this.action,
   });
   final String content;
+  final Function? action;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,11 @@ class AlertDialogCustom extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            if (action == null) {
+              Navigator.pop(context);
+            } else {
+              action!();
+            }
           },
           child: Text(AppLocalizations.of(context)!.check),
         )

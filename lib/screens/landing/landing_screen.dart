@@ -28,22 +28,6 @@ class _LandingScreenState extends State<LandingScreen>
     'Profile',
   ];
   int _selectedIndex = 0;
-  late final AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _animationController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

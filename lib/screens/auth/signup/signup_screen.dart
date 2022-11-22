@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/routes.dart';
 import 'package:missing_application/screens/auth/signup/widgets/signup_widgets.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
 import 'package:missing_application/screens/global/global_appbar.dart';
@@ -149,18 +150,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _handleSignupSubmit() {}
+  void _handleSignupSubmit() {
+    if (!idUsable) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: '아이디 중복을 검사하세요',
+          );
+        },
+      );
+      return;
+    }
+
+    if (!emailAuthrizationCheck) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: '이메일을 인증하세요',
+          );
+        },
+      );
+      return;
+    }
+
+    BlocProvider.of<AuthBloc>(context).add(Signup(id: id, email: email));
+  }
+
+  void _signupComplete(bool isComplete) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: isComplete ? '회원가입 성공' : '회원가입 실패',
+            action: isComplete
+                ? () {
+                    Navigator.popUntil(
+                        context, ModalRoute.withName(Routes.login));
+                  }
+                : null,
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalAppbar(),
       body: AuthBlocConsumer(
-        loaded: () {
-          Navigator.pop(context);
-        },
+        loaded: _signupComplete,
         idCheck: _idCheckState,
         emailCheck: _emailCheckState,
+        signup: _signupComplete,
         child: Form(
           key: _formKey,
           child: Column(
@@ -338,22 +380,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             )
                           : SizedBox(),
-                      // SignUpPadding(
-                      //   child: Container(
-                      //     padding: EdgeInsets.all(5),
-                      //     decoration: BoxDecoration(
-                      //       border: Border.all(
-                      //         color: Colors.grey,
-                      //       ),
-                      //       borderRadius: BorderRadius.circular(5),
-                      //     ),
-                      //     width: double.infinity,
-                      //     height: 500,
-                      //     child: SingleChildScrollView(
-                      //       child: SignupTerms(),
-                      //     ),
-                      //   ),
-                      // ),
                       SignUpPadding(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -42,5 +42,10 @@
   "signup_emailCode_correct": "certified",
   "signup_emailCode_incorrect": "doesn't match",
   "signup_emailCode_input": "Enter verification code",
-  "signup_email_regExp": "Please respect the email format"
+  "signup_email_regExp": "Please respect the email format",
+  "signup_policy_title": "privacy policy",
+  "signup_duplicate_warn": "Check ID duplicates",
+  "signup_email_warn": "Please verify your email",
+  "signup_success": "Member registration success",
+  "signup_fail": "Member registration fail"
 }

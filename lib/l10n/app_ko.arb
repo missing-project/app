@@ -42,5 +42,10 @@
   "signup_emailCode_correct": "인증되었습니다",
   "signup_emailCode_incorrect": "일치하지 않습니다",
   "signup_emailCode_input": "인증코드 입력",
-  "signup_email_regExp": "이메일 형식을 지켜주세요"
+  "signup_email_regExp": "이메일 형식을 지켜주세요",
+  "signup_policy_title": "개인정보 처리방침",
+  "signup_duplicate_warn": "아이디 중복을 검사하세요",
+  "signup_email_warn": "이메일을 인증하세요",
+  "signup_success": "회원가입 성공",
+  "signup_fail": "회원가입 실패"
 }

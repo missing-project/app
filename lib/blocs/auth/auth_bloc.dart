@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<Login>(_onLogin);
     on<IdCheck>(_idCheck);
     on<EmailCheck>(_emailCheck);
+    on<Signup>(_signUp);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -20,7 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogin(Login event, Emitter<AuthState> emit) async {
     try {
-      await repository.signIn();
+      await repository.signIn(event.id, event.password);
       return emit(AuthLoaded(repository.currentUser));
     } catch (err) {
       return emit(AuthError(err));
@@ -40,6 +41,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final code = await repository.emailCheck(event.email);
       return emit(AuthEmailCheck(code));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _signUp(Signup event, Emitter<AuthState> emit) async {
+    try {
+      final isSuccess = await repository.signUp(event.id, event.email);
+      return emit(AuthSignUp(isSuccess));
     } catch (err) {
       return emit(AuthError(err));
     }

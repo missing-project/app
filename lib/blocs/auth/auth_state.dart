@@ -30,3 +30,8 @@ class AuthEmailCheck extends AuthState {
   final String code;
   AuthEmailCheck(this.code);
 }
+
+class AuthSignUp extends AuthState {
+  final bool isComplete;
+  AuthSignUp(this.isComplete);
+}

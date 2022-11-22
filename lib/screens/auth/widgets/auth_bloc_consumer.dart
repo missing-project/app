@@ -10,12 +10,14 @@ class AuthBlocConsumer extends StatefulWidget {
     required this.loaded,
     this.idCheck,
     this.emailCheck,
+    this.signup,
   });
 
   final Widget child;
   final Function loaded;
   final Function(bool)? idCheck;
   final Function(String)? emailCheck;
+  final Function(bool)? signup;
 
   @override
   State<AuthBlocConsumer> createState() => _AuthBlocConsumerState();
@@ -42,6 +44,10 @@ class _AuthBlocConsumerState extends State<AuthBlocConsumer> {
 
         if (state is AuthEmailCheck && widget.emailCheck != null) {
           widget.emailCheck!(state.code);
+        }
+
+        if (state is AuthSignUp && widget.signup != null) {
+          widget.signup!(state.isComplete);
         }
       },
       builder: (_, state) {

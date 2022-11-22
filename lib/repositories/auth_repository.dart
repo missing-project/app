@@ -10,20 +10,23 @@ class AuthEndPoint {
 class AuthRepository {
   User currentUser = User.empty;
 
-  Future signIn() async {
-    await Future.delayed(const Duration(seconds: 2));
-    // 오류 테스트
-    // throw Exception('authError');
-    currentUser = currentUser.copywith(id: 'test_user');
+  Future signIn(String id, String password) async {
+    final rsp = await AuthService.login(id, password);
+    currentUser = User.fromJson(rsp);
   }
 
   Future<bool> idCheck(String id) async {
-    final rsp = await AuthService.checkIdDuplicate();
+    final rsp = await AuthService.checkIdDuplicate(id);
     return rsp['id'] == 1;
   }
 
   Future<String> emailCheck(String email) async {
-    final rsp = await AuthService.sendEmailAuthizationCode();
+    final rsp = await AuthService.sendEmailAuthizationCode(email);
     return rsp['id'].toString();
+  }
+
+  Future<bool> signUp(String id, String email) async {
+    final isSuccess = await AuthService.createUser(id, email);
+    return isSuccess;
   }
 }
