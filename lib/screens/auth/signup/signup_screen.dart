@@ -116,6 +116,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
   }
 
+  void _handleCheckTermsAgreement() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.all(10),
+          contentPadding: EdgeInsets.all(5),
+          actionsPadding: EdgeInsets.all(5),
+          title: Text('개인정보 처리방침'),
+          content: Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            height: MediaQuery.of(context).size.height / 2,
+            child: SingleChildScrollView(
+              child: SignupTerms(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context)!.check),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   void _handleSignupSubmit() {}
 
   @override
@@ -305,24 +338,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             )
                           : SizedBox(),
-                      RichText(
-                        text: TextSpan(
-                          text: AppLocalizations.of(context)!.signup_terms,
-                          style: DefaultTextStyle.of(context).style,
+                      // SignUpPadding(
+                      //   child: Container(
+                      //     padding: EdgeInsets.all(5),
+                      //     decoration: BoxDecoration(
+                      //       border: Border.all(
+                      //         color: Colors.grey,
+                      //       ),
+                      //       borderRadius: BorderRadius.circular(5),
+                      //     ),
+                      //     width: double.infinity,
+                      //     height: 500,
+                      //     child: SingleChildScrollView(
+                      //       child: SignupTerms(),
+                      //     ),
+                      //   ),
+                      // ),
+                      SignUpPadding(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: termsAgreement,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      termsAgreement = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .signup_terms_agree,
+                                ),
+                              ],
+                            ),
+                            OutlinedButton(
+                              onPressed: _handleCheckTermsAgreement,
+                              child: Text('내용 보기'),
+                            )
+                          ],
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: termsAgreement,
-                            onChanged: (value) {
-                              setState(() {
-                                termsAgreement = value!;
-                              });
-                            },
-                          ),
-                          Text(AppLocalizations.of(context)!.signup_terms_agree)
-                        ],
                       )
                     ],
                   ),

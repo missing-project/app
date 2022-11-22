@@ -106,3 +106,18 @@ class RowWithHeight extends StatelessWidget {
     );
   }
 }
+
+class SignupTerms extends StatelessWidget {
+  const SignupTerms({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppLocalizations.of(context)!.signup_terms,
+      style: TextStyle(
+        fontSize: 12,
+        color: Colors.grey[700],
+      ),
+    );
+  }
+}
