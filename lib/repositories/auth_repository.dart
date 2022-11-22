@@ -1,5 +1,6 @@
 import 'package:missing_application/models/auth_model.dart';
 import 'package:missing_application/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthEndPoint {
   static String get signIn => '/';
@@ -9,10 +10,24 @@ class AuthEndPoint {
 
 class AuthRepository {
   User currentUser = User.empty;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future signIn(String id, String password) async {
     final rsp = await AuthService.login(id, password);
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('token', rsp['token']);
     currentUser = User.fromJson(rsp);
+  }
+
+  Future<bool> signInAuto() async {
+    final SharedPreferences prefs = await _prefs;
+    final token = prefs.getString('token') ?? '';
+    if (token.isNotEmpty && token != 'null') {
+      final rsp = await AuthService.getMe();
+      currentUser = User.fromJson(rsp);
+    }
+
+    return token.isNotEmpty && token != 'null';
   }
 
   Future<bool> idCheck(String id) async {

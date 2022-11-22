@@ -14,6 +14,8 @@ class Login extends AuthEvent {
   Login({required this.id, required this.password});
 }
 
+class LoginAuto extends AuthEvent {}
+
 class Signup extends AuthEvent {
   final String id;
   final String email;

@@ -1,5 +1,6 @@
-// ignore_for_file: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/screens/landing/wigets/bookmark/bookmark_screen.dart';
 import 'package:missing_application/screens/landing/wigets/home/home_screen.dart';
 import 'package:missing_application/screens/landing/wigets/map/map_screen.dart';
@@ -28,6 +29,18 @@ class _LandingScreenState extends State<LandingScreen>
     'Profile',
   ];
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _loginAuto();
+    });
+  }
+
+  _loginAuto() async {
+    BlocProvider.of<AuthBloc>(context).add(LoginAuto());
+  }
 
   @override
   Widget build(BuildContext context) {

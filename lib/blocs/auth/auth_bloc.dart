@@ -11,6 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>(_onLoading);
     on<Login>(_onLogin);
+    on<LoginAuto>(_onLoginAuto);
     on<IdCheck>(_idCheck);
     on<EmailCheck>(_emailCheck);
     on<Signup>(_signUp);
@@ -25,6 +26,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return emit(AuthLoaded(repository.currentUser));
     } catch (err) {
       return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _onLoginAuto(LoginAuto event, Emitter<AuthState> emit) async {
+    try {
+      final isSuccess = await repository.signInAuto();
+      if (isSuccess) {
+        return emit(AuthLoaded(repository.currentUser));
+      } else {
+        return emit(AuthInitial());
+      }
+    } catch (err) {
+      return emit(AuthInitial());
     }
   }
 

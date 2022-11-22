@@ -6,6 +6,7 @@ class AuthService {
   static String idCheck = '/albums/1';
   static String emailCheck = '/albums/2';
   static String signup = '/albums/2';
+  static String me = '/albums/2';
 
   static Future login(String id, String password) async {
     final response =
@@ -38,5 +39,14 @@ class AuthService {
   static Future<bool> createUser(String id, String email) async {
     final response = await HttpConfig.post(signup, {id: id, email: email});
     return (response.statusCode == 200 || response.statusCode == 201);
+  }
+
+  static Future getMe() async {
+    final response = await HttpConfigAuthority.get(me);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to get ne');
+    }
   }
 }
