@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:missing_application/blocs/case/case_bloc.dart';
+import 'package:missing_application/models/case_model.dart';
+import 'package:missing_application/screens/case/widgets/case_bloc_consumer.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -13,13 +17,13 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
-  static double zoomInit = 17;
-  final List<Marker> _markers = [];
+  static double zoomInit = 13;
+  List<Marker> _markers = [];
   String _selected = '';
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(
-      37.532600,
-      127.024612,
+      37.498095,
+      127.027610,
     ),
     zoom: zoomInit,
   );
@@ -44,6 +48,24 @@ class _MapScreenState extends State<MapScreen> {
             }),
       );
     });
+  }
+
+  void _caselistLoaded(Case _, List<Case> list) {
+    final markerlist = list
+        .map((el) => Marker(
+              position: LatLng(el.latitude, el.longitude),
+              markerId: MarkerId(el.id),
+            ))
+        .toList();
+    setState(() {
+      _markers = markerlist;
+    });
+
+    print(markerlist);
+  }
+
+  void _getCaseList() {
+    BlocProvider.of<CaseBloc>(context).add(CaseList());
   }
 
   void _animateCamera(LatLng cordinate) async {
@@ -74,6 +96,7 @@ class _MapScreenState extends State<MapScreen> {
 
     LocationData userLocation = await location.getLocation();
     // _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
+    _getCaseList();
   }
 
   @override
@@ -84,24 +107,28 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GoogleMap(
-          initialCameraPosition: _kGooglePlex,
-          markers: _markers.toSet(),
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-          onTap: (cordinate) {
-            _animateCamera(cordinate);
-            _addMarker(cordinate);
-          },
-        ),
-        Positioned(
-          bottom: 0,
-          child: CaseSelected(id: _selected),
-        ),
-      ],
+    return CaseBlocConsumer(
+      loaded: _caselistLoaded,
+      child: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: _kGooglePlex,
+            markers: _markers.toSet(),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            // onTap: (cordinate) {
+            // print(cordinate);
+            // _animateCamera(cordinate);
+            // _addMarker(cordinate);
+            // },
+          ),
+          Positioned(
+            bottom: 0,
+            child: CaseSelected(id: _selected),
+          ),
+        ],
+      ),
     );
   }
 }
