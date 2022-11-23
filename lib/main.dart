@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/blocs/case/case_bloc.dart';
 import 'package:missing_application/repositories/auth_repository.dart';
+import 'package:missing_application/repositories/case_repository.dart';
 import 'package:missing_application/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthBloc(AuthRepository())),
+        BlocProvider(create: (_) => CaseBloc(CaseRepository())),
       ],
       child: MaterialApp(
         title: 'Missing',

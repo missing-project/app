@@ -29,7 +29,7 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
 
   Future<void> _getCaseDetail(CaseDetail event, Emitter<CaseState> emit) async {
     try {
-      await repository.getCaseDetail();
+      await repository.getCaseDetail(event.id);
       return emit(
           CaseLoaded(repository.currentCase, repository.currentCaselist));
     } catch (err) {

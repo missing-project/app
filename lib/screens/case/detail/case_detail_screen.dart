@@ -13,16 +13,15 @@ class CaseDetailScreen extends StatefulWidget {
 class _CaseDetailScreenState extends State<CaseDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as CaseDetailArguments;
+    final detail = ModalRoute.of(context)!.settings.arguments as Case;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('detail'),
       ),
       body: Hero(
-        tag: args.tag,
-        child: Image.network(args.source),
+        tag: detail.id,
+        child: Image.network(detail.image),
       ),
     );
   }

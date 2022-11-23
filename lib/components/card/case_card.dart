@@ -8,7 +8,7 @@ class CaseCard extends StatelessWidget {
     required this.detail,
   }) : super(key: key);
 
-  final CaseDetailArguments detail;
+  final Case detail;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,8 @@ class CaseCard extends StatelessWidget {
           );
         },
         child: Hero(
-          tag: detail.tag,
-          child: Image.network(detail.source),
+          tag: detail.id,
+          child: Image.network(detail.image),
         ),
       ),
     );
