@@ -57,11 +57,10 @@ class _MapScreenState extends State<MapScreen> {
               markerId: MarkerId(el.id),
             ))
         .toList();
+
     setState(() {
       _markers = markerlist;
     });
-
-    print(markerlist);
   }
 
   void _getCaseList() {
@@ -94,6 +93,7 @@ class _MapScreenState extends State<MapScreen> {
       }
     }
 
+    // 권한이 없을 때 리턴값이 오지 않는 에러가 있음
     LocationData userLocation = await location.getLocation();
     // _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
     _getCaseList();
