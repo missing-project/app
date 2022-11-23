@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -12,12 +13,15 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
+  static double zoomInit = 20;
+  final List<Marker> _markers = [];
+  String _selected = '';
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(
       37.532600,
       127.024612,
     ),
-    zoom: 14.4746,
+    zoom: zoomInit,
   );
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -25,10 +29,27 @@ class _MapScreenState extends State<MapScreen> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
-  void _goToUserLocation(LocationData data) async {
+  void _addMarker(LatLng cordinate) {
+    int id = Random().nextInt(100);
+
+    setState(() {
+      _markers.add(
+        Marker(
+            position: cordinate,
+            markerId: MarkerId(id.toString()),
+            onTap: () {
+              setState(() {
+                _selected = id.toString();
+              });
+            }),
+      );
+    });
+  }
+
+  void _animateCamera(LatLng cordinate) async {
     CameraPosition userPosition = CameraPosition(
-      target: LatLng(data.latitude!, data.longitude!),
-      zoom: 19.151926040649414,
+      target: LatLng(cordinate.latitude, cordinate.longitude),
+      zoom: zoomInit,
     );
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(userPosition));
@@ -52,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     LocationData userLocation = await location.getLocation();
-    _goToUserLocation(userLocation);
+    _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
   }
 
   @override
@@ -67,11 +88,60 @@ class _MapScreenState extends State<MapScreen> {
       children: [
         GoogleMap(
           initialCameraPosition: _kGooglePlex,
+          markers: _markers.toSet(),
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
+          onTap: (cordinate) {
+            _animateCamera(cordinate);
+            _addMarker(cordinate);
+          },
+        ),
+        Positioned(
+          bottom: 0,
+          child: CaseSelected(id: _selected),
         ),
       ],
     );
+  }
+}
+
+class CaseSelected extends StatefulWidget {
+  const CaseSelected({super.key, required this.id});
+
+  final String id;
+
+  @override
+  State<CaseSelected> createState() => _CaseSelectedState();
+}
+
+class _CaseSelectedState extends State<CaseSelected> {
+  final double _padding = 8.0;
+  @override
+  Widget build(BuildContext context) {
+    if (widget.id.isNotEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(_padding),
+        child: Container(
+          height: 100,
+          width: MediaQuery.of(context).size.width - (_padding * 2),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Text(widget.id),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 }
