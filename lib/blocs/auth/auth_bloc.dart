@@ -11,15 +11,59 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>(_onLoading);
     on<Login>(_onLogin);
+    on<LoginAuto>(_onLoginAuto);
+    on<IdCheck>(_idCheck);
+    on<EmailCheck>(_emailCheck);
+    on<Signup>(_signUp);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
       emit(AuthLoading());
 
-  Future<void> _onLogin(AuthEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onLogin(Login event, Emitter<AuthState> emit) async {
     try {
-      await repository.signIn();
+      await repository.signIn(event.id, event.password);
       return emit(AuthLoaded(repository.currentUser));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _onLoginAuto(LoginAuto event, Emitter<AuthState> emit) async {
+    try {
+      final isSuccess = await repository.signInAuto();
+      if (isSuccess) {
+        return emit(AuthLoaded(repository.currentUser));
+      } else {
+        return emit(AuthInitial());
+      }
+    } catch (err) {
+      return emit(AuthInitial());
+    }
+  }
+
+  Future<void> _idCheck(IdCheck event, Emitter<AuthState> emit) async {
+    try {
+      final isUsable = await repository.idCheck(event.id);
+      return emit(AuthIdCheck(isUsable));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _emailCheck(EmailCheck event, Emitter<AuthState> emit) async {
+    try {
+      final code = await repository.emailCheck(event.email);
+      return emit(AuthEmailCheck(code));
+    } catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _signUp(Signup event, Emitter<AuthState> emit) async {
+    try {
+      final isSuccess = await repository.signUp(event.id, event.email);
+      return emit(AuthSignUp(isSuccess));
     } catch (err) {
       return emit(AuthError(err));
     }

@@ -20,3 +20,18 @@ class AuthError extends AuthState {
   final Object? error;
   AuthError(this.error);
 }
+
+class AuthIdCheck extends AuthState {
+  final bool isUsable;
+  AuthIdCheck(this.isUsable);
+}
+
+class AuthEmailCheck extends AuthState {
+  final String code;
+  AuthEmailCheck(this.code);
+}
+
+class AuthSignUp extends AuthState {
+  final bool isComplete;
+  AuthSignUp(this.isComplete);
+}
