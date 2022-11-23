@@ -13,7 +13,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
-  static double zoomInit = 20;
+  static double zoomInit = 17;
   final List<Marker> _markers = [];
   String _selected = '';
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     LocationData userLocation = await location.getLocation();
-    _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
+    // _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
   }
 
   @override
