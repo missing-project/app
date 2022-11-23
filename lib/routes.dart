@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:missing_application/screens/auth/idpwSearch/idpw_search_screen.dart';
 import 'package:missing_application/screens/auth/signup/signup_screen.dart';
-import 'package:missing_application/screens/detail/case/case_detail_screen.dart';
+import 'package:missing_application/screens/case/detail/case_detail_screen.dart';
 import 'package:missing_application/screens/landing/landing_screen.dart';
 import 'package:missing_application/screens/auth/login/login_screen.dart';
 import 'package:missing_application/screens/profile/inquiry/inquiry_screen.dart';
