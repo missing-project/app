@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:missing_application/blocs/case/case_bloc.dart';
+import 'package:missing_application/components/card/case_row_card.dart';
 import 'package:missing_application/models/case_model.dart';
+import 'package:missing_application/routes.dart';
 import 'package:missing_application/screens/case/widgets/case_bloc_consumer.dart';
 
 class MapScreen extends StatefulWidget {
@@ -19,7 +21,7 @@ class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
   static double zoomInit = 13;
   List<Marker> _markers = [];
-  String _selected = '';
+  Case selectedCase = Case.empty;
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(
       37.498095,
@@ -42,9 +44,9 @@ class _MapScreenState extends State<MapScreen> {
             position: cordinate,
             markerId: MarkerId(id.toString()),
             onTap: () {
-              setState(() {
-                _selected = id.toString();
-              });
+              // setState(() {
+              //   _selected = id.toString();
+              // });
             }),
       );
     });
@@ -55,6 +57,11 @@ class _MapScreenState extends State<MapScreen> {
         .map((el) => Marker(
               position: LatLng(el.latitude, el.longitude),
               markerId: MarkerId(el.id),
+              onTap: () {
+                setState(() {
+                  selectedCase = el;
+                });
+              },
             ))
         .toList();
 
@@ -125,7 +132,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Positioned(
             bottom: 0,
-            child: CaseSelected(id: _selected),
+            child: CaseSelected(selected: selectedCase),
           ),
         ],
       ),
@@ -134,9 +141,12 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 class CaseSelected extends StatefulWidget {
-  const CaseSelected({super.key, required this.id});
+  const CaseSelected({
+    super.key,
+    required this.selected,
+  });
 
-  final String id;
+  final Case selected;
 
   @override
   State<CaseSelected> createState() => _CaseSelectedState();
@@ -146,25 +156,18 @@ class _CaseSelectedState extends State<CaseSelected> {
   final double _padding = 8.0;
   @override
   Widget build(BuildContext context) {
-    if (widget.id.isNotEmpty) {
+    if (widget.selected.id.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.all(_padding),
-        child: Container(
-          height: 100,
+        child: CaseRowCard(
+          detail: widget.selected,
           width: MediaQuery.of(context).size.width - (_padding * 2),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3),
-              ),
-            ],
+          shadow: BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
           ),
-          child: Text(widget.id),
         ),
       );
     } else {

@@ -8,8 +8,8 @@ class CaseRepository {
 
   Future getCaseList() async {
     final response = await CaseService.getCaseList();
-    // currentCaselist = response.map((el) => Case.fromJson(el)).toList();
-    currentCaselist = response;
+    currentCaselist = response.map((el) => Case.fromJson(el)).toList();
+    // currentCaselist = response;
   }
 
   Future getCaseDetail(String id) async {

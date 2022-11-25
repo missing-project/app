@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.blueGrey,
           fontFamily: 'ChosunGs',
           // elevatedButtonTheme: ElevatedButtonThemeData(
           //   style: ElevatedButton.styleFrom(

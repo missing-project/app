@@ -15,8 +15,11 @@ class Case extends Equatable {
     required this.name,
     required this.date,
     required this.age,
+    required this.ageNow,
     required this.place,
     required this.image,
+    required this.dress,
+    required this.targetCode,
     required this.latitude,
     required this.longitude,
   });
@@ -25,8 +28,11 @@ class Case extends Equatable {
   final String name;
   final String date;
   final String age;
+  final String ageNow;
   final String place;
   final String image;
+  final String dress;
+  final String targetCode;
   final double latitude;
   final double longitude;
 
@@ -38,8 +44,11 @@ class Case extends Equatable {
     name: '',
     date: '',
     age: '',
+    ageNow: '',
     place: '',
     image: '',
+    dress: '',
+    targetCode: '',
     latitude: 0,
     longitude: 0,
   );
@@ -49,8 +58,11 @@ class Case extends Equatable {
     String? name,
     String? date,
     String? age,
+    String? ageNow,
     String? place,
     String? image,
+    String? dress,
+    String? targetCode,
     double? latitude,
     double? longitude,
   }) {
@@ -59,8 +71,11 @@ class Case extends Equatable {
       name: name ?? '',
       date: date ?? '',
       age: age ?? '',
+      ageNow: ageNow ?? '',
       place: place ?? '',
       image: image ?? '',
+      dress: dress ?? '',
+      targetCode: targetCode ?? '',
       latitude: latitude ?? 0,
       longitude: longitude ?? 0,
     );
@@ -68,14 +83,17 @@ class Case extends Equatable {
 
   factory Case.fromJson(Map<String, dynamic> json) {
     return Case(
-      id: json['id'].toString(),
-      name: json['id'].toString(),
-      date: json['id'].toString(),
-      age: json['id'].toString(),
-      place: json['id'].toString(),
-      image: json['id'].toString(),
-      latitude: json['id'],
-      longitude: json['id'],
+      id: json['key'].toString(),
+      name: json['nm'].toString(),
+      date: json['occrDate'].toString(),
+      age: json['age'].toString(),
+      ageNow: json['ageNow'].toString(),
+      place: json['occrAdres'].toString(),
+      image: json['img'].toString(),
+      dress: json['alldressingDscd'].toString(),
+      targetCode: json['writngTrgetDscd'].toString(),
+      latitude: json['x'] ?? 37.48543063634536,
+      longitude: json['y'] ?? 127.01553449034692,
     );
   }
 }
