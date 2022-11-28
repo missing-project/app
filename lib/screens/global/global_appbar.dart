@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GlobalAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const GlobalAppbar({super.key});
+  const GlobalAppbar({
+    super.key,
+    this.bottom,
+  });
+
+  final PreferredSizeWidget? bottom;
 
   @override
   Size get preferredSize => Size.fromHeight(60);
@@ -20,6 +25,7 @@ class GlobalAppbar extends StatelessWidget implements PreferredSizeWidget {
       ),
       backgroundColor: Colors.transparent,
       elevation: 0,
+      bottom: bottom,
     );
   }
 }
