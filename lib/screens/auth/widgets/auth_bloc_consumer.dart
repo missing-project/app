@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/models/auth_model.dart';
 import 'package:missing_application/screens/global/loading_stack.dart';
 
 class AuthBlocConsumer extends StatefulWidget {
@@ -14,7 +15,7 @@ class AuthBlocConsumer extends StatefulWidget {
   });
 
   final Widget child;
-  final Function loaded;
+  final Function(User) loaded;
   final Function(bool)? idCheck;
   final Function(String)? emailCheck;
   final Function(bool)? signup;
@@ -35,7 +36,7 @@ class _AuthBlocConsumerState extends State<AuthBlocConsumer> {
         }
 
         if (state is AuthLoaded) {
-          widget.loaded();
+          widget.loaded(state.user);
         }
 
         if (state is AuthIdCheck && widget.idCheck != null) {

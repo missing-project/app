@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpConfig {
-  static String serverUrl = 'https://jsonplaceholder.typicode.com';
+  // static String serverUrl = 'https://jsonplaceholder.typicode.com';
+  static String serverUrl = 'http://10.0.2.2:5001'; // android
 
   static Future<http.Response> get(String endpoint) async {
     final result = await http.get(Uri.parse('$serverUrl$endpoint'));

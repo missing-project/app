@@ -199,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: GlobalAppbar(),
       body: AuthBlocConsumer(
-        loaded: _signupComplete,
+        loaded: (_) {},
         idCheck: _idCheckState,
         emailCheck: _emailCheckState,
         signup: _signupComplete,

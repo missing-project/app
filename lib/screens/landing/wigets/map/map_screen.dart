@@ -1,7 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:missing_application/blocs/case/case_bloc.dart';
+import 'package:missing_application/components/card/case_row_card.dart';
+import 'package:missing_application/models/case_model.dart';
+import 'package:missing_application/screens/case/widgets/case_bloc_consumer.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -12,12 +18,15 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
+  static double zoomInit = 13;
+  List<Marker> _markers = [];
+  Case selectedCase = Case.empty;
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(
-      37.532600,
-      127.024612,
+      37.498095,
+      127.027610,
     ),
-    zoom: 14.4746,
+    zoom: zoomInit,
   );
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -25,10 +34,49 @@ class _MapScreenState extends State<MapScreen> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
-  void _goToUserLocation(LocationData data) async {
+  void _addMarker(LatLng cordinate) {
+    int id = Random().nextInt(100);
+
+    setState(() {
+      _markers.add(
+        Marker(
+            position: cordinate,
+            markerId: MarkerId(id.toString()),
+            onTap: () {
+              // setState(() {
+              //   _selected = id.toString();
+              // });
+            }),
+      );
+    });
+  }
+
+  void _caselistLoaded(Case _, List<Case> list) {
+    final markerlist = list
+        .map((el) => Marker(
+              position: LatLng(el.latitude, el.longitude),
+              markerId: MarkerId(el.id),
+              onTap: () {
+                setState(() {
+                  selectedCase = el;
+                });
+              },
+            ))
+        .toList();
+
+    setState(() {
+      _markers = markerlist;
+    });
+  }
+
+  void _getCaseList() {
+    BlocProvider.of<CaseBloc>(context).add(CaseList());
+  }
+
+  void _animateCamera(LatLng cordinate) async {
     CameraPosition userPosition = CameraPosition(
-      target: LatLng(data.latitude!, data.longitude!),
-      zoom: 19.151926040649414,
+      target: LatLng(cordinate.latitude, cordinate.longitude),
+      zoom: zoomInit,
     );
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(userPosition));
@@ -51,8 +99,10 @@ class _MapScreenState extends State<MapScreen> {
       }
     }
 
+    // 권한이 없을 때 리턴값이 오지 않는 에러가 있음
     LocationData userLocation = await location.getLocation();
-    _goToUserLocation(userLocation);
+    // _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
+    _getCaseList();
   }
 
   @override
@@ -63,15 +113,65 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GoogleMap(
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ),
-      ],
+    return CaseBlocConsumer(
+      loaded: _caselistLoaded,
+      child: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: _kGooglePlex,
+            markers: _markers.toSet(),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            // onTap: (cordinate) {
+            // print(cordinate);
+            // _animateCamera(cordinate);
+            // _addMarker(cordinate);
+            // },
+          ),
+          Positioned(
+            bottom: 0,
+            child: CaseSelected(selected: selectedCase),
+          ),
+        ],
+      ),
     );
+  }
+}
+
+class CaseSelected extends StatefulWidget {
+  const CaseSelected({
+    super.key,
+    required this.selected,
+  });
+
+  final Case selected;
+
+  @override
+  State<CaseSelected> createState() => _CaseSelectedState();
+}
+
+class _CaseSelectedState extends State<CaseSelected> {
+  final double _padding = 8.0;
+  @override
+  Widget build(BuildContext context) {
+    if (widget.selected.id.isNotEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(_padding),
+        child: CaseRowCard(
+          radius: 5,
+          detail: widget.selected,
+          width: MediaQuery.of(context).size.width - (_padding * 2),
+          shadow: BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 }

@@ -23,7 +23,7 @@ class _LandingScreenState extends State<LandingScreen>
   ];
 
   static const List<String> _title = [
-    'Home',
+    'Missing',
     'Map',
     'BookMark',
     'Profile',

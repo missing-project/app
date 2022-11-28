@@ -37,12 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           {
             Property.name: AppLocalizations.of(context)!.profile_notice,
             Property.isActive: true,
-            Property.pushNamed: Routes.setting,
-          },
-          {
-            Property.name: AppLocalizations.of(context)!.profile_setting,
-            Property.isActive: true,
-            Property.pushNamed: Routes.setting,
+            Property.pushNamed: Routes.notice,
           },
           {
             Property.name: AppLocalizations.of(context)!.profile_inquiry,
