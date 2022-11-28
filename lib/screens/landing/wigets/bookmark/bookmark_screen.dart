@@ -42,7 +42,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     //   longitude: 0,
     // ),
   ];
-  void handleLoaded() {
+  void handleLoaded(_) {
     setState(() {
       isLogin = true;
     });

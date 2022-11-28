@@ -6,7 +6,7 @@ import 'package:missing_application/screens/landing/landing_screen.dart';
 import 'package:missing_application/screens/auth/login/login_screen.dart';
 import 'package:missing_application/screens/profile/inquiry/inquiry_screen.dart';
 import 'package:missing_application/screens/profile/myInfo/my_info_screen.dart';
-import 'package:missing_application/screens/profile/setting/setting_screen.dart';
+import 'package:missing_application/screens/profile/notice/notice_screen.dart';
 
 class Routes {
   static String get landing => '/';
@@ -17,6 +17,7 @@ class Routes {
   static String get myInfo => '/myInfo';
   static String get inquiry => '/inquiry';
   static String get setting => '/setting';
+  static String get notice => '/notice';
 }
 
 final routes = {
@@ -27,5 +28,5 @@ final routes = {
   Routes.idpwSearch: (BuildContext context) => IdPwSearchScreen(),
   Routes.myInfo: (BuildContext context) => MyInfoScreen(),
   Routes.inquiry: (BuildContext context) => InquiryScreen(),
-  Routes.setting: (BuildContext context) => SettingScreen(),
+  Routes.notice: (BuildContext context) => NoticeScreen(),
 };
