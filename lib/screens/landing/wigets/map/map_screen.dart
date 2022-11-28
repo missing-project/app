@@ -7,7 +7,6 @@ import 'package:location/location.dart';
 import 'package:missing_application/blocs/case/case_bloc.dart';
 import 'package:missing_application/components/card/case_row_card.dart';
 import 'package:missing_application/models/case_model.dart';
-import 'package:missing_application/routes.dart';
 import 'package:missing_application/screens/case/widgets/case_bloc_consumer.dart';
 
 class MapScreen extends StatefulWidget {
@@ -160,6 +159,7 @@ class _CaseSelectedState extends State<CaseSelected> {
       return Padding(
         padding: EdgeInsets.all(_padding),
         child: CaseRowCard(
+          radius: 5,
           detail: widget.selected,
           width: MediaQuery.of(context).size.width - (_padding * 2),
           shadow: BoxShadow(
