@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/routes.dart';
+import 'package:missing_application/screens/global/image_builder.dart';
 
 class CaseRowCard extends StatelessWidget {
   const CaseRowCard({
@@ -42,7 +43,7 @@ class CaseRowCard extends StatelessWidget {
             Hero(
                 tag: detail.id,
                 child: detail.image.isNotEmpty
-                    ? Image.network(detail.image)
+                    ? ImageBuilder(url: detail.image)
                     : SizedBox()),
             SizedBox(width: 10),
             Column(

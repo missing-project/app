@@ -92,8 +92,8 @@ class Case extends Equatable {
       image: json['img'].toString(),
       dress: json['alldressingDscd'].toString(),
       targetCode: json['writngTrgetDscd'].toString(),
-      latitude: json['x'] ?? 37.48543063634536,
-      longitude: json['y'] ?? 127.01553449034692,
+      latitude: json['y'] ?? 0,
+      longitude: json['x'] ?? 0,
     );
   }
 }

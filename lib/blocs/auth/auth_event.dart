@@ -37,3 +37,15 @@ class EmailCheck extends AuthEvent {
 
   EmailCheck({required this.email});
 }
+
+class GetUser extends AuthEvent {}
+
+class BookMarkAdd extends AuthEvent {
+  final String id;
+  BookMarkAdd({required this.id});
+}
+
+class BookMarkDel extends AuthEvent {
+  final String id;
+  BookMarkDel({required this.id});
+}

@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/models/auth_model.dart';
 import 'package:missing_application/models/case_model.dart';
+import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
+import 'package:missing_application/screens/global/image_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CaseDetailScreen extends StatefulWidget {
   const CaseDetailScreen({
@@ -11,52 +17,105 @@ class CaseDetailScreen extends StatefulWidget {
 }
 
 class _CaseDetailScreenState extends State<CaseDetailScreen> {
+  final Map<String, String> target = {
+    '010': '정상아동(18세미만)',
+    '020': '가출인',
+    '040': '시설보호무연고자',
+    '060': '지적장애인',
+    '061': '지적장애인(18세미만)',
+    '062': '치매질환자',
+    '080': '불상(기타)',
+  };
+
+  bool isLogin = false;
+  List<Case> bookmarks = [];
+
+  void handleLoaded(User user) {
+    setState(() {
+      isLogin = true;
+      bookmarks = user.bookmarks;
+    });
+  }
+
+  void handleBookmark() {
+    if (isLogin) {
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('로그인해야 이용할 수 있습니다'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(AppLocalizations.of(context)!.check),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<AuthBloc>(context).add(GetUser());
+  }
+
   @override
   Widget build(BuildContext context) {
     final detail = ModalRoute.of(context)!.settings.arguments as Case;
-    final Map<String, String> target = {
-      '010': '정상아동(18세미만)',
-      '020': '가출인',
-      '040': '시설보호무연고자',
-      '060': '지적장애인',
-      '061': '지적장애인(18세미만)',
-      '062': '치매질환자',
-      '080': '불상(기타)',
-    };
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('detail'),
-      ),
-      body: Column(
-        children: [
-          Hero(
-            tag: detail.id,
-            child: Image.network(
-              detail.image,
+    return AuthBlocConsumer(
+      loaded: handleLoaded,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('detail'),
+        ),
+        body: Column(
+          children: [
+            Hero(
+              tag: detail.id,
+              child: ImageBuilder(url: detail.image),
             ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: ListView(
-              children: [
-                DetailPropety(property: '이름', value: detail.name),
-                DetailPropety(
-                  property: '대상',
-                  value: target[detail.targetCode] ?? '불상(기타)',
-                ),
-                DetailPropety(
-                  property: '실종 날짜',
-                  value: detail.date.substring(0, 10),
-                ),
-                DetailPropety(property: '실종 장소', value: detail.place),
-                DetailPropety(property: '당시 나이', value: detail.age),
-                DetailPropety(property: '현재 나이', value: detail.ageNow),
-                DetailPropety(property: '의상 차림', value: detail.dress),
-              ],
+            SizedBox(
+              height: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: handleBookmark,
+                    icon: Icon(
+                        bookmarks.indexWhere((el) => el.id == detail.id) > 0
+                            ? Icons.bookmark
+                            : Icons.bookmark_outline),
+                  )
+                ],
+              ),
             ),
-          )
-        ],
+            Expanded(
+              child: ListView(
+                children: [
+                  DetailPropety(property: '이름', value: detail.name),
+                  DetailPropety(
+                    property: '대상',
+                    value: target[detail.targetCode] ?? '불상(기타)',
+                  ),
+                  DetailPropety(
+                    property: '실종 날짜',
+                    value: detail.date.substring(0, 10),
+                  ),
+                  DetailPropety(property: '실종 장소', value: detail.place),
+                  DetailPropety(property: '당시 나이', value: detail.age),
+                  DetailPropety(property: '현재 나이', value: detail.ageNow),
+                  DetailPropety(property: '의상 차림', value: detail.dress),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

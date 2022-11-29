@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,43 +33,23 @@ class _MapScreenState extends State<MapScreen> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
-  void _addMarker(LatLng cordinate) {
-    int id = Random().nextInt(100);
-
-    setState(() {
-      _markers.add(
-        Marker(
-            position: cordinate,
-            markerId: MarkerId(id.toString()),
-            onTap: () {
-              // setState(() {
-              //   _selected = id.toString();
-              // });
-            }),
-      );
-    });
-  }
-
   void _caselistLoaded(Case _, List<Case> list) {
-    final markerlist = list
-        .map((el) => Marker(
-              position: LatLng(el.latitude, el.longitude),
-              markerId: MarkerId(el.id),
-              onTap: () {
-                setState(() {
-                  selectedCase = el;
-                });
-              },
-            ))
-        .toList();
+    final markerlist =
+        list.where((el) => el.latitude * el.longitude > 0).map((el) {
+      return Marker(
+        position: LatLng(el.latitude, el.longitude),
+        markerId: MarkerId(el.id),
+        onTap: () {
+          setState(() {
+            selectedCase = el;
+          });
+        },
+      );
+    }).toList();
 
     setState(() {
       _markers = markerlist;
     });
-  }
-
-  void _getCaseList() {
-    BlocProvider.of<CaseBloc>(context).add(CaseList());
   }
 
   void _animateCamera(LatLng cordinate) async {
@@ -101,14 +80,14 @@ class _MapScreenState extends State<MapScreen> {
 
     // 권한이 없을 때 리턴값이 오지 않는 에러가 있음
     LocationData userLocation = await location.getLocation();
-    // _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
-    _getCaseList();
+    _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
   }
 
   @override
   void initState() {
     super.initState();
-    _locateCheck();
+    // _locateCheck();
+    BlocProvider.of<CaseBloc>(context).add(CaseList());
   }
 
   @override
@@ -119,15 +98,11 @@ class _MapScreenState extends State<MapScreen> {
         children: [
           GoogleMap(
             initialCameraPosition: _kGooglePlex,
+            myLocationEnabled: true,
             markers: _markers.toSet(),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
-            // onTap: (cordinate) {
-            // print(cordinate);
-            // _animateCamera(cordinate);
-            // _addMarker(cordinate);
-            // },
           ),
           Positioned(
             bottom: 0,

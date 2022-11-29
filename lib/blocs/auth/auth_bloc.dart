@@ -15,6 +15,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<IdCheck>(_idCheck);
     on<EmailCheck>(_emailCheck);
     on<Signup>(_signUp);
+    on<GetUser>(_getMe);
+    on<BookMarkAdd>(_bookMarkAdd);
+    on<BookMarkDel>(_bookMarkDel);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -66,6 +69,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return emit(AuthSignUp(isSuccess));
     } catch (err) {
       return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _getMe(GetUser event, Emitter<AuthState> emit) async {
+    if (repository.currentUser.email.isNotEmpty) {
+      return emit(AuthLoaded(repository.currentUser));
+    } else {
+      return emit(AuthInitial());
+    }
+  }
+
+  Future<void> _bookMarkAdd(BookMarkAdd event, Emitter<AuthState> emit) async {
+    try {
+      await repository.bookMarkAdd(event.id);
+      return emit(AuthLoaded(repository.currentUser));
+    } catch (e) {
+      return emit(AuthInitial());
+    }
+  }
+
+  Future<void> _bookMarkDel(BookMarkDel event, Emitter<AuthState> emit) async {
+    try {
+      await repository.bookMarkDel(event.id);
+      return emit(AuthLoaded(repository.currentUser));
+    } catch (e) {
+      return emit(AuthInitial());
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/routes.dart';
+import 'package:missing_application/screens/global/image_builder.dart';
 
 class CaseImageCard extends StatelessWidget {
   const CaseImageCard({
@@ -23,9 +24,7 @@ class CaseImageCard extends StatelessWidget {
         },
         child: Hero(
           tag: detail.id,
-          child: Image.network(
-            detail.image,
-          ),
+          child: ImageBuilder(url: detail.image),
         ),
       ),
     );

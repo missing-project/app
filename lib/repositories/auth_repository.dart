@@ -44,4 +44,12 @@ class AuthRepository {
     final isSuccess = await AuthService.createUser(id, email);
     return isSuccess;
   }
+
+  Future bookMarkAdd(String id) async {
+    // currentUser.bookmarks.add();
+  }
+
+  Future bookMarkDel(String id) async {
+    // currentUser.bookmarks.remove();
+  }
 }
