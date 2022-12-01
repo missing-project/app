@@ -175,7 +175,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    BlocProvider.of<AuthBloc>(context).add(Signup(id: id, email: email));
+    BlocProvider.of<AuthBloc>(context)
+        .add(Signup(id: id, email: email, password: password));
   }
 
   void _signupComplete(bool isComplete) {

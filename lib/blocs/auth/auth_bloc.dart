@@ -65,7 +65,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _signUp(Signup event, Emitter<AuthState> emit) async {
     try {
-      final isSuccess = await repository.signUp(event.id, event.email);
+      final isSuccess =
+          await repository.signUp(event.id, event.email, event.password);
       return emit(AuthSignUp(isSuccess));
     } catch (err) {
       return emit(AuthError(err));

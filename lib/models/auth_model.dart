@@ -27,7 +27,7 @@ class User extends Equatable {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'].toString(),
+      id: json['uid'].toString(),
       email: json['email'].toString(),
     );
   }

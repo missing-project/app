@@ -15,8 +15,8 @@ class AuthRepository {
   Future signIn(String id, String password) async {
     final rsp = await AuthService.login(id, password);
     final SharedPreferences prefs = await _prefs;
-    prefs.setString('token', rsp['token']);
-    currentUser = User.fromJson(rsp);
+    prefs.setString('token', rsp['accessToken']);
+    currentUser = User.fromJson(rsp['loginUser']);
   }
 
   Future<bool> signInAuto() async {
@@ -32,16 +32,16 @@ class AuthRepository {
 
   Future<bool> idCheck(String id) async {
     final rsp = await AuthService.checkIdDuplicate(id);
-    return rsp['id'] == 1;
+    return rsp['isUsable'];
   }
 
   Future<String> emailCheck(String email) async {
     final rsp = await AuthService.sendEmailAuthizationCode(email);
-    return rsp['id'].toString();
+    return rsp['code'].toString();
   }
 
-  Future<bool> signUp(String id, String email) async {
-    final isSuccess = await AuthService.createUser(id, email);
+  Future<bool> signUp(String id, String email, String password) async {
+    final isSuccess = await AuthService.createUser(id, email, password);
     return isSuccess;
   }
 
