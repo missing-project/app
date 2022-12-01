@@ -12,7 +12,6 @@ class AuthService {
     final response =
         await HttpConfig.post(signIn, {"uid": id, "password": password});
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response);
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to login');

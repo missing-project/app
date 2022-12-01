@@ -1,4 +1,5 @@
 import 'package:missing_application/models/auth_model.dart';
+import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +11,7 @@ class AuthEndPoint {
 
 class AuthRepository {
   User currentUser = User.empty;
+  List<Case> bookmarks = [];
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future signIn(String id, String password) async {
@@ -44,6 +46,8 @@ class AuthRepository {
     final isSuccess = await AuthService.createUser(id, email, password);
     return isSuccess;
   }
+
+  Future bookmarkGet() async {}
 
   Future bookMarkAdd(String id) async {
     // currentUser.bookmarks.add();
