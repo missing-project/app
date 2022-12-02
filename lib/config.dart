@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HttpConfig {
   // static String serverUrl = 'https://jsonplaceholder.typicode.com';
   // static String serverUrl = 'http://10.0.2.2:8989'; // android
-  static String serverUrl = 'http://localhost:8989'; // ios
-  // static String serverUrl = 'http://13.209.238.196:8989'; // aws
+  // static String serverUrl = 'http://localhost:8989'; // ios
+  static String serverUrl = 'http://13.209.238.196:8989'; // aws
 
   static Future<http.Response> get(String endpoint) async {
     final result = await http.get(Uri.parse('$serverUrl$endpoint'));

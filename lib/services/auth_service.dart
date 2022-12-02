@@ -6,7 +6,7 @@ class AuthService {
   static String idCheck = '/guest/checkid';
   static String emailCheck = '/guest/authmail';
   static String signup = '/guest/register';
-  static String me = '/albums/2';
+  // static String me = '/albums/2';
 
   static Future login(String id, String password) async {
     final response =
@@ -43,12 +43,12 @@ class AuthService {
     return (response.statusCode == 200 || response.statusCode == 201);
   }
 
-  static Future getMe() async {
-    final response = await HttpConfigAuthority.get(me);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to get ne');
-    }
-  }
+  // static Future getMe() async {
+  //   final response = await HttpConfigAuthority.get(me);
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     return jsonDecode(response.body);
+  //   } else {
+  //     throw Exception('Failed to get ne');
+  //   }
+  // }
 }
