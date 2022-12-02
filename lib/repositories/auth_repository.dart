@@ -49,11 +49,11 @@ class AuthRepository {
 
   Future bookmarkGet() async {}
 
-  Future bookMarkAdd(String id) async {
-    // currentUser.bookmarks.add();
+  Future bookMarkAdd(Case arg) async {
+    bookmarks.add(arg);
   }
 
-  Future bookMarkDel(String id) async {
-    // currentUser.bookmarks.remove();
+  Future bookMarkDel(Case arg) async {
+    bookmarks.removeWhere((el) => el.id == arg.id);
   }
 }

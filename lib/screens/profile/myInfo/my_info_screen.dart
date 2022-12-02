@@ -13,7 +13,7 @@ class MyInfoScreen extends StatefulWidget {
 class _MyInfoScreenState extends State<MyInfoScreen> {
   String email = '';
 
-  void handleLoaded(User user) {
+  void handleLoaded(User user, _) {
     setState(() {
       email = user.email;
     });

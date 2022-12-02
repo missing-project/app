@@ -15,9 +15,10 @@ class BookmarkScreen extends StatefulWidget {
 class _BookmarkScreenState extends State<BookmarkScreen> {
   bool isLogin = false;
   List<Case> bookmarks = [];
-  void handleLoaded(_) {
+  void handleLoaded(_, List<Case> bookmarklist) {
     setState(() {
       isLogin = true;
+      bookmarks = bookmarklist;
     });
   }
 

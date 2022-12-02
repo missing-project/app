@@ -13,7 +13,8 @@ class AuthLoading extends AuthState {}
 
 class AuthLoaded extends AuthState {
   final User user;
-  AuthLoaded(this.user);
+  final List<Case> bookmarks;
+  AuthLoaded(this.user, this.bookmarks);
 }
 
 class AuthError extends AuthState {

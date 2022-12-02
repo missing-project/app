@@ -43,11 +43,11 @@ class EmailCheck extends AuthEvent {
 class GetUser extends AuthEvent {}
 
 class BookMarkAdd extends AuthEvent {
-  final String id;
-  BookMarkAdd({required this.id});
+  final Case element;
+  BookMarkAdd({required this.element});
 }
 
 class BookMarkDel extends AuthEvent {
-  final String id;
-  BookMarkDel({required this.id});
+  final Case element;
+  BookMarkDel({required this.element});
 }

@@ -30,15 +30,20 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
   bool isLogin = false;
   List<Case> bookmarks = [];
 
-  void handleLoaded(User user) {
+  void handleLoaded(_, List<Case> bookmarklist) {
     setState(() {
       isLogin = true;
-      bookmarks = user.bookmarks;
+      bookmarks = bookmarklist;
     });
   }
 
-  void handleBookmark() {
+  void handleBookmark(Case element, bool isBookMark) {
     if (isLogin) {
+      BlocProvider.of<AuthBloc>(context).add(
+        isBookMark
+            ? BookMarkDel(element: element)
+            : BookMarkAdd(element: element),
+      );
     } else {
       showDialog(
         context: context,
@@ -68,6 +73,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final detail = ModalRoute.of(context)!.settings.arguments as Case;
+    bool isBookMark = bookmarks.indexWhere((el) => el.id == detail.id) > -1;
     return AuthBlocConsumer(
       loaded: handleLoaded,
       child: Scaffold(
@@ -86,11 +92,12 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: handleBookmark,
+                    onPressed: () {
+                      handleBookmark(detail, isBookMark);
+                    },
                     icon: Icon(
-                        bookmarks.indexWhere((el) => el.id == detail.id) > 0
-                            ? Icons.bookmark
-                            : Icons.bookmark_outline),
+                      isBookMark ? Icons.bookmark : Icons.bookmark_outline,
+                    ),
                   )
                 ],
               ),

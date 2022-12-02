@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:missing_application/models/auth_model.dart';
+import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/repositories/auth_repository.dart';
 
 part 'auth_event.dart';
@@ -26,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLogin(Login event, Emitter<AuthState> emit) async {
     try {
       await repository.signIn(event.id, event.password);
-      return emit(AuthLoaded(repository.currentUser));
+      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
     } catch (err) {
       return emit(AuthError(err));
     }
@@ -36,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isSuccess = await repository.signInAuto();
       if (isSuccess) {
-        return emit(AuthLoaded(repository.currentUser));
+        return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
       } else {
         return emit(AuthInitial());
       }
@@ -75,27 +76,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _getMe(GetUser event, Emitter<AuthState> emit) async {
     if (repository.currentUser.email.isNotEmpty) {
-      return emit(AuthLoaded(repository.currentUser));
+      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
     } else {
       return emit(AuthInitial());
     }
   }
 
   Future<void> _bookMarkAdd(BookMarkAdd event, Emitter<AuthState> emit) async {
-    try {
-      await repository.bookMarkAdd(event.id);
-      return emit(AuthLoaded(repository.currentUser));
-    } catch (e) {
-      return emit(AuthInitial());
-    }
+    await repository.bookMarkAdd(event.element);
+    return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
   }
 
   Future<void> _bookMarkDel(BookMarkDel event, Emitter<AuthState> emit) async {
-    try {
-      await repository.bookMarkDel(event.id);
-      return emit(AuthLoaded(repository.currentUser));
-    } catch (e) {
-      return emit(AuthInitial());
-    }
+    await repository.bookMarkDel(event.element);
+    return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
   }
 }
