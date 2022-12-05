@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:missing_application/config.dart';
 // import 'package:missing_application/models/case_model.dart';
 
-class CaseService {
+class CaseEndpoint {
   static String caseList = '/mp';
   static String caseDetail = '/detail';
+}
 
+class CaseService {
   static Future<List<dynamic>> getCaseList() async {
-    final response = await HttpConfig.get(caseList);
+    final response = await HttpConfig.get(CaseEndpoint.caseList);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
@@ -55,7 +57,7 @@ class CaseService {
   }
 
   static Future getCaseDetail(String id) async {
-    final response = await HttpConfig.get('$caseDetail/?id=$id');
+    final response = await HttpConfig.get('${CaseEndpoint.caseDetail}/?id=$id');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
