@@ -175,7 +175,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    BlocProvider.of<AuthBloc>(context).add(Signup(id: id, email: email));
+    BlocProvider.of<AuthBloc>(context)
+        .add(Signup(id: id, email: email, password: password));
   }
 
   void _signupComplete(bool isComplete) {
@@ -199,7 +200,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: GlobalAppbar(),
       body: AuthBlocConsumer(
-        loaded: (_) {},
+        loaded: (_, __) {},
         idCheck: _idCheckState,
         emailCheck: _emailCheckState,
         signup: _signupComplete,

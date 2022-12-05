@@ -19,10 +19,12 @@ class LoginAuto extends AuthEvent {}
 class Signup extends AuthEvent {
   final String id;
   final String email;
+  final String password;
 
   Signup({
     required this.id,
     required this.email,
+    required this.password,
   });
 }
 
@@ -36,4 +38,16 @@ class EmailCheck extends AuthEvent {
   final String email;
 
   EmailCheck({required this.email});
+}
+
+class GetUser extends AuthEvent {}
+
+class BookMarkAdd extends AuthEvent {
+  final Case element;
+  BookMarkAdd({required this.element});
+}
+
+class BookMarkDel extends AuthEvent {
+  final Case element;
+  BookMarkDel({required this.element});
 }

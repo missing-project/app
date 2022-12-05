@@ -33,14 +33,14 @@ class _LandingScreenState extends State<LandingScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _loginAuto();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   _loginAuto();
+    // });
   }
 
-  _loginAuto() async {
-    BlocProvider.of<AuthBloc>(context).add(LoginAuto());
-  }
+  // _loginAuto() async {
+  //   BlocProvider.of<AuthBloc>(context).add(LoginAuto());
+  // }
 
   @override
   Widget build(BuildContext context) {

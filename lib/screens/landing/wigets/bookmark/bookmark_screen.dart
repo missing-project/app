@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/components/card/case_row_card.dart';
 import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
@@ -12,40 +14,18 @@ class BookmarkScreen extends StatefulWidget {
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
   bool isLogin = false;
-  List<Case> bookmarks = [
-    // Case(
-    //   id: 'id',
-    //   name: 'name',
-    //   date: 'date',
-    //   age: 'age',
-    //   ageNow: 'ageNow',
-    //   place: 'place',
-    //   image:
-    //       'https://www.safe182.go.kr/api/lcm/imgView.do?msspsnIdntfccd=5470099',
-    //   dress: 'dress',
-    //   targetCode: 'targetCode',
-    //   latitude: 0,
-    //   longitude: 0,
-    // ),
-    // Case(
-    //   id: 'id',
-    //   name: 'name',
-    //   date: 'date',
-    //   age: 'age',
-    //   ageNow: 'ageNow',
-    //   place: 'place',
-    //   image:
-    //       'https://www.safe182.go.kr/api/lcm/imgView.do?msspsnIdntfccd=5470099',
-    //   dress: 'dress',
-    //   targetCode: 'targetCode',
-    //   latitude: 0,
-    //   longitude: 0,
-    // ),
-  ];
-  void handleLoaded(_) {
+  List<Case> bookmarks = [];
+  void handleLoaded(_, List<Case> bookmarklist) {
     setState(() {
       isLogin = true;
+      bookmarks = bookmarklist;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<AuthBloc>(context).add(GetUser());
   }
 
   @override
@@ -53,7 +33,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return AuthBlocConsumer(
       loaded: handleLoaded,
       child: !isLogin
-          ? Center(child: Text('회원가입을 하셔야\n\n이용할 수 있습니다'))
+          ? Center(
+              child: Text(
+                '로그인 해야\n\n이용할 수 있습니다',
+                textAlign: TextAlign.center,
+              ),
+            )
           : bookmarks.isEmpty
               ? Center(child: Text('저장된 데이터가 없습니다'))
               : ListView(

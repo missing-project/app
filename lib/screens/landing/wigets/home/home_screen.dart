@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     autoPlayCurve: Curves.linear,
                     autoPlayInterval: Duration(seconds: 5),
                     autoPlayAnimationDuration: Duration(seconds: 5),
+                    enableInfiniteScroll: false,
                   ),
                 ),
               ),

@@ -19,7 +19,9 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
 
   Future<void> _getCaseList(CaseList event, Emitter<CaseState> emit) async {
     try {
-      await repository.getCaseList();
+      if (repository.currentCaselist.isEmpty) {
+        await repository.getCaseList();
+      }
       return emit(
           CaseLoaded(repository.currentCase, repository.currentCaselist));
     } catch (err) {

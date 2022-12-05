@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: GlobalAppbar(),
       body: AuthBlocConsumer(
-        loaded: (_) {
+        loaded: (_, __) {
           Navigator.pop(context);
         },
         child: Padding(
