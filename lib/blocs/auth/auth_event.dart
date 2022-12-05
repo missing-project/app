@@ -51,3 +51,7 @@ class BookMarkDel extends AuthEvent {
   final Case element;
   BookMarkDel({required this.element});
 }
+
+class Logout extends AuthEvent {}
+
+class Signout extends AuthEvent {}
