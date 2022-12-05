@@ -19,6 +19,6 @@ class CaseLoaded extends CaseState {
 }
 
 class CaseError extends CaseState {
-  final Object? error;
+  final Exception? error;
   CaseError(this.error);
 }
