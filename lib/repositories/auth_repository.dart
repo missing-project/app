@@ -55,4 +55,11 @@ class AuthRepository {
     await AuthService.deleteBookmark(arg.id);
     bookmarks.removeWhere((el) => el.id == arg.id);
   }
+
+  Future logout() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('token', '');
+    currentUser = User.empty;
+    bookmarks = [];
+  }
 }
