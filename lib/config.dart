@@ -48,7 +48,7 @@ class HttpConfigAuthorized {
     final token = await _getToken();
     final result = await http.get(
       Uri.parse('${HttpConfig.serverUrl}$endpoint'),
-      headers: {'Authrization': token},
+      headers: {'authorization': 'access $token'},
     );
     return result;
   }
@@ -57,7 +57,7 @@ class HttpConfigAuthorized {
     final token = await _getToken();
     final result = await http.post(
       Uri.parse('${HttpConfig.serverUrl}$endpoint'),
-      headers: {'Authrization': token},
+      headers: {'authorization': 'access $token'},
       body: body,
     );
     return result;
@@ -67,7 +67,7 @@ class HttpConfigAuthorized {
     final token = await _getToken();
     final result = await http.patch(
       Uri.parse('${HttpConfig.serverUrl}$endpoint'),
-      headers: {'Authrization': token},
+      headers: {'authorization': 'access $token'},
       body: body,
     );
     return result;
@@ -77,7 +77,7 @@ class HttpConfigAuthorized {
     final token = await _getToken();
     final result = await http.delete(
       Uri.parse('${HttpConfig.serverUrl}$endpoint'),
-      headers: {'Authrization': token},
+      headers: {'authorization': 'access $token'},
       body: body,
     );
     return result;
