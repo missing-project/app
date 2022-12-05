@@ -31,7 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await repository.signIn(event.id, event.password);
       await repository.bookmarkGet();
       return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(AuthError(err));
     }
   }
@@ -53,7 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isUsable = await repository.idCheck(event.id);
       return emit(AuthIdCheck(isUsable));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(AuthError(err));
     }
   }
@@ -62,7 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final code = await repository.emailCheck(event.email);
       return emit(AuthEmailCheck(code));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(AuthError(err));
     }
   }
@@ -72,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final isSuccess =
           await repository.signUp(event.id, event.email, event.password);
       return emit(AuthSignUp(isSuccess));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(AuthError(err));
     }
   }
@@ -87,13 +87,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // 에러핸들링 추가 요망
   Future<void> _bookMarkAdd(BookMarkAdd event, Emitter<AuthState> emit) async {
-    await repository.bookMarkAdd(event.element);
-    return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
+    try {
+      await repository.bookMarkAdd(event.element);
+      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
   }
 
   Future<void> _bookMarkDel(BookMarkDel event, Emitter<AuthState> emit) async {
-    await repository.bookMarkDel(event.element);
-    return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
+    try {
+      await repository.bookMarkDel(event.element);
+      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
   }
 
   Future<void> _onLogout(Logout event, Emitter<AuthState> emit) async {

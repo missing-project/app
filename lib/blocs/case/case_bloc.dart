@@ -24,7 +24,7 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
       }
       return emit(
           CaseLoaded(repository.currentCase, repository.currentCaselist));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(CaseError(err));
     }
   }
@@ -34,7 +34,7 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
       await repository.getCaseDetail(event.id);
       return emit(
           CaseLoaded(repository.currentCase, repository.currentCaselist));
-    } catch (err) {
+    } on Exception catch (err) {
       return emit(CaseError(err));
     }
   }

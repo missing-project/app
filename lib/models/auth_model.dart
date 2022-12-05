@@ -28,3 +28,8 @@ class User extends Equatable {
     );
   }
 }
+
+class PreferencesKey {
+  static String accesstoken = 'access';
+  static String refreshtoken = 'refresh';
+}
