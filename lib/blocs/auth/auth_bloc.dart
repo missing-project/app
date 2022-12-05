@@ -19,6 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GetUser>(_getMe);
     on<BookMarkAdd>(_bookMarkAdd);
     on<BookMarkDel>(_bookMarkDel);
+    on<Logout>(_onLogout);
+    on<Signout>(_onSignout);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -93,4 +95,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await repository.bookMarkDel(event.element);
     return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
   }
+
+  Future<void> _onLogout(Logout event, Emitter<AuthState> emit) async {
+    await repository.logout();
+    return emit(AuthInitial());
+  }
+
+  Future<void> _onSignout(Signout event, Emitter<AuthState> emit) async {}
 }
