@@ -6,18 +6,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthRepository {
   User currentUser = User.empty;
   List<Case> bookmarks = [];
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<SharedPreferences> _prefs() async {
+    return await SharedPreferences.getInstance();
+  }
 
   Future signIn(String id, String password) async {
     final rsp = await AuthService.login(id, password);
-    final SharedPreferences prefs = await _prefs;
-    prefs.setString('token', rsp['accessToken']);
-    currentUser = User.fromJson(rsp['loginUser']);
+    final SharedPreferences prefs = await _prefs();
+    prefs.setString(PreferencesKey.accesstoken, rsp['accessToken']);
+    prefs.setString(PreferencesKey.refreshtoken, rsp['refreshToken']);
+    currentUser = User.fromJson(rsp['user']);
   }
 
   Future<bool> signInAuto() async {
-    final SharedPreferences prefs = await _prefs;
-    final token = prefs.getString('token') ?? '';
+    final SharedPreferences prefs = await _prefs();
+    final token = prefs.getString(PreferencesKey.accesstoken) ?? '';
     // if (token.isNotEmpty && token != 'null') {
     //   final rsp = await AuthService.getMe();
     //   currentUser = User.fromJson(rsp);
@@ -57,8 +60,9 @@ class AuthRepository {
   }
 
   Future logout() async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setString('token', '');
+    final SharedPreferences prefs = await _prefs();
+    prefs.remove(PreferencesKey.accesstoken);
+    prefs.remove(PreferencesKey.refreshtoken);
     currentUser = User.empty;
     bookmarks = [];
   }

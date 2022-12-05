@@ -18,7 +18,7 @@ class AuthLoaded extends AuthState {
 }
 
 class AuthError extends AuthState {
-  final Object? error;
+  final Exception error;
   AuthError(this.error);
 }
 
