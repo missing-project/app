@@ -41,13 +41,18 @@ class AuthRepository {
     return isSuccess;
   }
 
-  Future bookmarkGet() async {}
+  Future bookmarkGet() async {
+    final response = await AuthService.findBookmarks();
+    bookmarks = response.map((el) => Case.fromJson(el)).toList();
+  }
 
   Future bookMarkAdd(Case arg) async {
+    await AuthService.createBookmark(arg.id);
     bookmarks.add(arg);
   }
 
   Future bookMarkDel(Case arg) async {
+    await AuthService.deleteBookmark(arg.id);
     bookmarks.removeWhere((el) => el.id == arg.id);
   }
 }

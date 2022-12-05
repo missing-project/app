@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:missing_application/config.dart';
+import 'package:missing_application/models/case_model.dart';
 
 class AuthEndpoint {
   static String signIn = '/guest/login';
   static String idCheck = '/guest/checkid';
   static String emailCheck = '/guest/authmail';
   static String signup = '/guest/register';
+  static String bookmark = '/bookmark';
   // static String me = '/albums/2';
 }
 
@@ -64,6 +66,29 @@ class AuthService {
       },
     );
     return (response.statusCode == 200 || response.statusCode == 201);
+  }
+
+  static Future<List<dynamic>> findBookmarks() async {
+    final response = await HttpConfigAuthorized.get(AuthEndpoint.bookmark);
+    return jsonDecode(response.body);
+  }
+
+  static Future createBookmark(String id) async {
+    await HttpConfigAuthorized.post(
+      AuthEndpoint.bookmark,
+      {
+        "key": id,
+      },
+    );
+  }
+
+  static Future deleteBookmark(String id) async {
+    await HttpConfigAuthorized.delete(
+      AuthEndpoint.bookmark,
+      {
+        "key": id,
+      },
+    );
   }
 
   // static Future getMe() async {

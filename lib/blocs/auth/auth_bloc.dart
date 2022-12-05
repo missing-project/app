@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLogin(Login event, Emitter<AuthState> emit) async {
     try {
       await repository.signIn(event.id, event.password);
+      await repository.bookmarkGet();
       return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
     } catch (err) {
       return emit(AuthError(err));
@@ -82,6 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  // 에러핸들링 추가 요망
   Future<void> _bookMarkAdd(BookMarkAdd event, Emitter<AuthState> emit) async {
     await repository.bookMarkAdd(event.element);
     return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
