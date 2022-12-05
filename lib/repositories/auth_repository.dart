@@ -3,12 +3,6 @@ import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// class AuthEndPoint {
-//   static String get signIn => '/';
-//   static String get idCheck => '/albums/1';
-//   static String get emailCheck => '/albums/1';
-// }
-
 class AuthRepository {
   User currentUser = User.empty;
   List<Case> bookmarks = [];

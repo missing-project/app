@@ -112,7 +112,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
                   ),
                   DetailPropety(
                     property: '실종 날짜',
-                    value: detail.date.substring(0, 10),
+                    value: detail.date,
                   ),
                   DetailPropety(property: '실종 장소', value: detail.place),
                   DetailPropety(property: '당시 나이', value: detail.age),

@@ -83,9 +83,9 @@ class Case extends Equatable {
 
   factory Case.fromJson(Map<String, dynamic> json) {
     return Case(
-      id: json['key'].toString(),
+      id: json['_id'].toString(),
       name: json['nm'].toString(),
-      date: json['occrDate'].toString(),
+      date: json['occrDate'].toString().substring(0, 10),
       age: json['age'].toString(),
       ageNow: json['ageNow'].toString(),
       place: json['occrAdres'].toString(),
