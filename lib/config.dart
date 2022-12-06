@@ -80,6 +80,25 @@ class HttpConfigAuthorized {
     );
   }
 
+  static Future<Response> getAccessToken(String enpoint) async {
+    final SharedPreferences prefs = await _prefs();
+    final refreshToken = prefs.getString(PreferencesKey.refreshtoken) ?? '';
+    final dioRefresh = Dio(
+      BaseOptions(
+        baseUrl: HttpConfig.serverUrl,
+        headers: {'authorization': 'refresh $refreshToken'},
+      ),
+    );
+    final response = await dioRefresh.get(enpoint).catchError((err) {
+      if (err is DioError) {
+        throw Exception(err.response!.data['message']);
+      }
+    });
+    prefs.setString(PreferencesKey.accesstoken, response.data['accessToken']);
+    prefs.setString(PreferencesKey.refreshtoken, response.data['refreshToken']);
+    return response;
+  }
+
   static Future<Response> _tokenExpireHandler(
     Future<Response> Function(String, Object) dioRequest,
     String endpoint,
@@ -99,21 +118,7 @@ class HttpConfigAuthorized {
     );
 
     if (isExpiredToken) {
-      final SharedPreferences prefs = await _prefs();
-      final refreshToken = prefs.getString(PreferencesKey.refreshtoken) ?? '';
-      final dioRefresh = Dio(
-        BaseOptions(
-          baseUrl: HttpConfig.serverUrl,
-          headers: {'authorization': 'refresh $refreshToken'},
-        ),
-      );
-      final rsp = await dioRefresh.get('/user/refresh').catchError((err) {
-        if (err is DioError) {
-          throw Exception(err.response!.data['message']);
-        }
-      });
-      prefs.setString(PreferencesKey.accesstoken, rsp.data['accessToken']);
-      prefs.setString(PreferencesKey.refreshtoken, rsp.data['refreshToken']);
+      await getAccessToken('/user/refresh');
       result = await dioRequest(endpoint, body);
     }
 
