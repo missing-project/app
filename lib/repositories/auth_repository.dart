@@ -72,4 +72,8 @@ class AuthRepository {
     currentUser = User.empty;
     bookmarks = [];
   }
+
+  Future userInfoChange(Map<String, dynamic> userInfo) async {
+    await AuthService.changeUserInfo(userInfo);
+  }
 }
