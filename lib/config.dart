@@ -7,43 +7,31 @@ class HttpConfig {
   // static String serverUrl = 'http://localhost:8989'; // ios
   // static String serverUrl = 'http://13.209.238.196:8989'; // aws
 
-  static final Dio dioUnauthorized = Dio(
+  static final Dio _dioUnauthorized = Dio(
     BaseOptions(
       baseUrl: serverUrl,
     ),
   );
 
   static Future<Response> get(String endpoint) async {
-    final result = await dioUnauthorized.get(endpoint);
+    final result = await _dioUnauthorized.get(endpoint);
     return result;
   }
 
   static Future<Response> post(String endpoint, Object body) async {
-    final result = await dioUnauthorized.post(endpoint, data: body);
+    final result = await _dioUnauthorized.post(endpoint, data: body);
     return result;
   }
 
   static Future<Response> patch(String endpoint, Object body) async {
-    final result = await dioUnauthorized.patch(endpoint, data: body);
+    final result = await _dioUnauthorized.patch(endpoint, data: body);
     return result;
   }
 
   static Future<Response> delete(String endpoint, Object body) async {
-    final result = await dioUnauthorized.delete(endpoint, data: body);
+    final result = await _dioUnauthorized.delete(endpoint, data: body);
     return result;
   }
-}
-
-Future<Response> tokenExpireHandler(
-  Future<Response> Function(String, Object) dioRequest,
-  String endpoint,
-  Object body,
-) async {
-  final result = await dioRequest(endpoint, body);
-  if (result.data['message'] == 'jwt expired') {
-    throw Exception('jwt expired');
-  }
-  return result;
 }
 
 class HttpConfigAuthorized {
@@ -60,7 +48,7 @@ class HttpConfigAuthorized {
     return token;
   }
 
-  static Future<Dio> dioAuthorized() async {
+  static Future<Dio> _dioAuthorized() async {
     final token = await _getToken();
     return Dio(
       BaseOptions(
@@ -70,39 +58,75 @@ class HttpConfigAuthorized {
     );
   }
 
+  static Future<Response> _tokenExpireHandler(
+    Future<Response> Function(String, Object) dioRequest,
+    String endpoint,
+    Object body,
+  ) async {
+    bool isExpiredToken = false;
+    Response<dynamic> result = await dioRequest(endpoint, body).catchError(
+      (error) {
+        if (error is DioError) {
+          if (error.response!.data['message'] == 'jwt expired') {
+            isExpiredToken = true;
+          } else {
+            throw Exception(error.response!.data['message']);
+          }
+        }
+      },
+    );
+
+    if (isExpiredToken) {
+      final SharedPreferences prefs = await _prefs();
+      final refreshToken = prefs.getString(PreferencesKey.refreshtoken) ?? '';
+      final dioRefresh = Dio(
+        BaseOptions(
+          baseUrl: HttpConfig.serverUrl,
+          headers: {'authorization': 'refresh $refreshToken'},
+        ),
+      );
+      final rsp = await dioRefresh.get('/user/refresh');
+      prefs.setString(PreferencesKey.accesstoken, rsp.data['accessToken']);
+      prefs.setString(PreferencesKey.refreshtoken, rsp.data['refreshToken']);
+      result = await dioRequest(endpoint, body);
+    }
+
+    return result;
+  }
+
   static Future<Response> _get(String endpoint, Object body) async {
-    final dio = await dioAuthorized();
+    final dio = await _dioAuthorized();
     final result = await dio.get(endpoint);
     return result;
   }
 
   static Future<Response> _post(String endpoint, Object body) async {
-    final dio = await dioAuthorized();
+    final dio = await _dioAuthorized();
     final result = await dio.post(endpoint, data: body);
     return result;
   }
 
   static Future<Response> _patch(String endpoint, Object body) async {
-    final dio = await dioAuthorized();
+    final dio = await _dioAuthorized();
     final result = await dio.patch(endpoint, data: body);
     return result;
   }
 
   static Future<Response> _delete(String endpoint, Object body) async {
-    final dio = await dioAuthorized();
+    final dio = await _dioAuthorized();
     final result = await dio.delete(endpoint, data: body);
     return result;
   }
 
   static Future<Response> get(String endpoint, [Object body = const {}]) =>
-      tokenExpireHandler(_get, endpoint, body);
+      _tokenExpireHandler(_get, endpoint, body);
 
   static Future<Response> post(String endpoint, Object body) =>
-      tokenExpireHandler(_post, endpoint, body);
+      _tokenExpireHandler(_post, endpoint, body);
 
   static Future<Response> patch(String endpoint, Object body) =>
-      tokenExpireHandler(_patch, endpoint, body);
+      _tokenExpireHandler(_patch, endpoint, body);
 
   static Future<Response> delete(String endpoint, Object body) =>
-      tokenExpireHandler(_delete, endpoint, body);
+      _tokenExpireHandler(_delete, endpoint, body);
 }
