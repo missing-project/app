@@ -13,25 +13,47 @@ class HttpConfig {
     ),
   );
 
-  static Future<Response> get(String endpoint) async {
+  static Future<Response> _catchErrorHandler(
+    Future<Response> Function(String, Object) dioRequest,
+    String endpoint,
+    Object body,
+  ) async {
+    final result = await dioRequest(endpoint, body).catchError((error) {
+      if (error is DioError) {
+        throw Exception(error.response!.data['message']);
+      }
+    });
+    return result;
+  }
+
+  static Future<Response> _get(String endpoint, Object body) async {
     final result = await _dioUnauthorized.get(endpoint);
     return result;
   }
 
-  static Future<Response> post(String endpoint, Object body) async {
+  static Future<Response> _post(String endpoint, Object body) async {
     final result = await _dioUnauthorized.post(endpoint, data: body);
     return result;
   }
 
-  static Future<Response> patch(String endpoint, Object body) async {
+  static Future<Response> _patch(String endpoint, Object body) async {
     final result = await _dioUnauthorized.patch(endpoint, data: body);
     return result;
   }
 
-  static Future<Response> delete(String endpoint, Object body) async {
+  static Future<Response> _delete(String endpoint, Object body) async {
     final result = await _dioUnauthorized.delete(endpoint, data: body);
     return result;
   }
+
+  static Future<Response> get(String endpoint, [Object body = const {}]) =>
+      _catchErrorHandler(_get, endpoint, body);
+  static Future<Response> post(String endpoint, [Object body = const {}]) =>
+      _catchErrorHandler(_post, endpoint, body);
+  static Future<Response> patch(String endpoint, [Object body = const {}]) =>
+      _catchErrorHandler(_patch, endpoint, body);
+  static Future<Response> delete(String endpoint, [Object body = const {}]) =>
+      _catchErrorHandler(_delete, endpoint, body);
 }
 
 class HttpConfigAuthorized {
@@ -40,8 +62,8 @@ class HttpConfigAuthorized {
   }
 
   static Future<String> _getToken() async {
-    final SharedPreferences pref = await _prefs();
-    final token = pref.getString(PreferencesKey.accesstoken) ?? '';
+    final SharedPreferences prefs = await _prefs();
+    final token = prefs.getString(PreferencesKey.accesstoken) ?? '';
     if (token.isEmpty) {
       throw Exception('no Authrization');
     }
@@ -85,7 +107,11 @@ class HttpConfigAuthorized {
           headers: {'authorization': 'refresh $refreshToken'},
         ),
       );
-      final rsp = await dioRefresh.get('/user/refresh');
+      final rsp = await dioRefresh.get('/user/refresh').catchError((err) {
+        if (err is DioError) {
+          throw Exception(err.response!.data['message']);
+        }
+      });
       prefs.setString(PreferencesKey.accesstoken, rsp.data['accessToken']);
       prefs.setString(PreferencesKey.refreshtoken, rsp.data['refreshToken']);
       result = await dioRequest(endpoint, body);
