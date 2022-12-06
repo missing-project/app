@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/blocs/case/case_bloc.dart';
 import 'package:missing_application/repositories/auth_repository.dart';
+import 'package:missing_application/repositories/case_repository.dart';
 import 'package:missing_application/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthBloc(AuthRepository())),
+        BlocProvider(create: (_) => CaseBloc(CaseRepository())),
       ],
       child: MaterialApp(
         title: 'Missing',
@@ -24,8 +27,16 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.blueGrey,
           fontFamily: 'ChosunGs',
+          // elevatedButtonTheme: ElevatedButtonThemeData(
+          //   style: ElevatedButton.styleFrom(
+          //     disabledBackgroundColor: Colors.grey[100],
+          //     disabledForegroundColor: Colors.grey[600],
+          //     backgroundColor: Theme.of(context).primaryColor,
+          //     foregroundColor: Colors.white,
+          //   ),
+          // ),
         ),
         initialRoute: '/',
         routes: routes,
