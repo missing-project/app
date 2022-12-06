@@ -25,6 +25,100 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Widget child(AuthState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: LogoText(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: TextFormField(
+                obscureText: false,
+                onChanged: ((value) {
+                  setState(() {
+                    id = value;
+                  });
+                }),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.id,
+                ),
+                validator: (value) {
+                  return value == null || value.isEmpty
+                      ? AppLocalizations.of(context)!.login_input_valid
+                      : null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: TextFormField(
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.password,
+                ),
+                validator: (value) {
+                  return value == null || value.isEmpty
+                      ? AppLocalizations.of(context)!.login_password_valid
+                      : null;
+                },
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _handleLoginBtn,
+                child: Text(
+                  AppLocalizations.of(context)!.login_button,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.idpwSearch);
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.login_authInquiry,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.signup);
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.login_signup,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,97 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
         loaded: (_, __) {
           Navigator.pop(context);
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: LogoText(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: TextFormField(
-                    obscureText: false,
-                    onChanged: ((value) {
-                      setState(() {
-                        id = value;
-                      });
-                    }),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: AppLocalizations.of(context)!.id,
-                    ),
-                    validator: (value) {
-                      return value == null || value.isEmpty
-                          ? AppLocalizations.of(context)!.login_input_valid
-                          : null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: TextFormField(
-                    obscureText: true,
-                    onChanged: (value) {
-                      setState(() {
-                        password = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: AppLocalizations.of(context)!.password,
-                    ),
-                    validator: (value) {
-                      return value == null || value.isEmpty
-                          ? AppLocalizations.of(context)!.login_password_valid
-                          : null;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _handleLoginBtn,
-                    child: Text(
-                      AppLocalizations.of(context)!.login_button,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(Routes.idpwSearch);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.login_authInquiry,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(Routes.signup);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.login_signup,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+        child: child,
       ),
     );
   }
