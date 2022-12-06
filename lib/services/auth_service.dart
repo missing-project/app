@@ -3,12 +3,12 @@ import 'package:missing_application/config.dart';
 import 'package:missing_application/models/case_model.dart';
 
 class AuthEndpoint {
-  static String signIn = '/guest/login';
   static String idCheck = '/guest/checkid';
   static String emailCheck = '/guest/authmail';
   static String signup = '/guest/register';
+  static String signIn = '/guest/login';
   static String bookmark = '/bookmark';
-  // static String me = '/albums/2';
+  static String remember = '/user/remember';
 }
 
 class AuthService {
@@ -91,12 +91,9 @@ class AuthService {
     );
   }
 
-  // static Future getMe() async {
-  //   final response = await HttpConfigAuthority.get(me);
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     return jsonDecode(response.body);
-  //   } else {
-  //     throw Exception('Failed to get ne');
-  //   }
-  // }
+  static Future loginRemember() async {
+    final response =
+        await HttpConfigAuthorized.getAccessToken(AuthEndpoint.remember);
+    return response.data;
+  }
 }
