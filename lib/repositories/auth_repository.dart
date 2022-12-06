@@ -20,13 +20,14 @@ class AuthRepository {
 
   Future<bool> signInAuto() async {
     final SharedPreferences prefs = await _prefs();
-    final token = prefs.getString(PreferencesKey.accesstoken) ?? '';
-    // if (token.isNotEmpty && token != 'null') {
-    //   final rsp = await AuthService.getMe();
-    //   currentUser = User.fromJson(rsp);
-    // }
-
-    return token.isNotEmpty && token != 'null';
+    final token = prefs.getString(PreferencesKey.refreshtoken) ?? '';
+    if (token.isNotEmpty && token != 'null') {
+      final rsp = await AuthService.loginRemember();
+      currentUser = User.fromJson(rsp);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> idCheck(String id) async {
