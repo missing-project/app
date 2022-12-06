@@ -8,6 +8,7 @@ class AuthEndpoint {
   static String signIn = '/guest/login';
   static String bookmark = '/bookmark';
   static String remember = '/user/remember';
+  static String changePassword = '/guest/changePassword';
 }
 
 class AuthService {
@@ -108,5 +109,9 @@ class AuthService {
     final response =
         await HttpConfigAuthorized.getAccessToken(AuthEndpoint.remember);
     return response.data;
+  }
+
+  static Future changeUserInfo(Map<String, dynamic> userInfo) async {
+    await HttpConfig.post(AuthEndpoint.changePassword, userInfo);
   }
 }

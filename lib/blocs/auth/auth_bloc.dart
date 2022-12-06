@@ -21,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<BookMarkDel>(_bookMarkDel);
     on<Logout>(_onLogout);
     on<Signout>(_onSignout);
+    on<UserInfoChange>(_onUserInfoChange);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -88,7 +89,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  // 에러핸들링 추가 요망
   Future<void> _bookMarkAdd(BookMarkAdd event, Emitter<AuthState> emit) async {
     try {
       await repository.bookMarkAdd(event.element);
@@ -113,4 +113,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignout(Signout event, Emitter<AuthState> emit) async {}
+
+  Future<void> _onUserInfoChange(
+      UserInfoChange event, Emitter<AuthState> emit) async {
+    try {
+      await repository.userInfoChange({
+        'email': event.email,
+        'password': event.password,
+      });
+      return emit(AuthInitial());
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
+  }
 }

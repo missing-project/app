@@ -58,3 +58,9 @@ class BookMarkDel extends AuthEvent {
 class Logout extends AuthEvent {}
 
 class Signout extends AuthEvent {}
+
+class UserInfoChange extends AuthEvent {
+  final String? email;
+  final String? password;
+  UserInfoChange({this.email, this.password});
+}
