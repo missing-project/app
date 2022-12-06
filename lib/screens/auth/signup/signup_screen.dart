@@ -195,6 +195,222 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
   }
 
+  Widget child(AuthState state) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: ListView(
+                children: [
+                  SignUpPadding(
+                    child: RowWithHeight(
+                      children: [
+                        Expanded(
+                          child: TextFormFieldStyle(
+                            obscure: false,
+                            readOnly: idUsable,
+                            suffixIcon: idUsable
+                                ? Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  )
+                                : null,
+                            label: AppLocalizations.of(context)!.id,
+                            onChanged: ((value) {
+                              setState(() {
+                                id = value;
+                              });
+                            }),
+                          ),
+                        ),
+                        SizedBox(
+                          height: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: idUsable ? null : _handleIdCheck,
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .signup_id_duplicate_btn,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SignUpPadding(
+                    child: TextFormFieldStyle(
+                      obscure: !passwordVisible,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            passwordVisible = !passwordVisible;
+                          });
+                        },
+                        icon: Icon(
+                          passwordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      label: AppLocalizations.of(context)!.password,
+                      errorTxt: _passwordErrorText,
+                      focusNode: _pwFocusNode,
+                      onChanged: ((value) {
+                        setState(() {
+                          password = value;
+                        });
+                      }),
+                      validator: (value) {
+                        return value == null ||
+                                value.isEmpty ||
+                                !passwordRegex.hasMatch(value)
+                            ? AppLocalizations.of(context)!.signup_pw_invalid
+                            : null;
+                      },
+                    ),
+                  ),
+                  SignUpPadding(
+                    child: TextFormFieldStyle(
+                      obscure: !passwordCheckVisible,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            passwordCheckVisible = !passwordCheckVisible;
+                          });
+                        },
+                        icon: Icon(
+                          passwordCheckVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      label: AppLocalizations.of(context)!.passwordCheck,
+                      errorTxt: _pwChFocusNode.hasFocus &&
+                              password != passwordCheck
+                          ? AppLocalizations.of(context)!.signup_pwCh_invalid
+                          : null,
+                      focusNode: _pwChFocusNode,
+                      onChanged: ((value) {
+                        setState(() {
+                          passwordCheck = value;
+                        });
+                      }),
+                      validator: (value) {
+                        return value == null ||
+                                value.isEmpty ||
+                                password != passwordCheck
+                            ? AppLocalizations.of(context)!.signup_pwCh_invalid
+                            : null;
+                      },
+                    ),
+                  ),
+                  SignUpPadding(
+                    child: RowWithHeight(
+                      children: [
+                        Expanded(
+                          child: TextFormFieldStyle(
+                            obscure: false,
+                            readOnly: emailAuthrizationCode.isNotEmpty,
+                            suffixIcon: emailAuthrizationCheck
+                                ? Icon(Icons.check, color: Colors.green)
+                                : null,
+                            label: AppLocalizations.of(context)!.signup_email,
+                            onChanged: (value) {
+                              setState(() {
+                                email = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: emailAuthrizationCheck
+                                ? null
+                                : _handleEmailCheck,
+                            child: Text(
+                              AppLocalizations.of(context)!.signup_authrization,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  emailAuthrizationCode.isNotEmpty && !emailAuthrizationCheck
+                      ? SignUpPadding(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      emailCodeInputValue = value;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    label: Text(AppLocalizations.of(context)!
+                                        .signup_emailCode_input),
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: _emailCodeCheck,
+                                child:
+                                    Text(AppLocalizations.of(context)!.check),
+                              )
+                            ],
+                          ),
+                        )
+                      : SizedBox(),
+                  SignUpPadding(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: termsAgreement,
+                              onChanged: (value) {
+                                setState(() {
+                                  termsAgreement = value!;
+                                });
+                              },
+                            ),
+                            Text(
+                              AppLocalizations.of(context)!.signup_terms_agree,
+                            ),
+                          ],
+                        ),
+                        OutlinedButton(
+                          onPressed: _handleCheckTermsAgreement,
+                          child: Text('내용 보기'),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: termsAgreement && _formKey.currentState!.validate()
+                  ? _handleSignupSubmit
+                  : null,
+              child: Text(AppLocalizations.of(context)!.signup_btn),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,227 +420,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         idCheck: _idCheckState,
         emailCheck: _emailCheckState,
         signup: _signupComplete,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: ListView(
-                    children: [
-                      SignUpPadding(
-                        child: RowWithHeight(
-                          children: [
-                            Expanded(
-                              child: TextFormFieldStyle(
-                                obscure: false,
-                                readOnly: idUsable,
-                                suffixIcon: idUsable
-                                    ? Icon(
-                                        Icons.check,
-                                        color: Colors.green,
-                                      )
-                                    : null,
-                                label: AppLocalizations.of(context)!.id,
-                                onChanged: ((value) {
-                                  setState(() {
-                                    id = value;
-                                  });
-                                }),
-                              ),
-                            ),
-                            SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: idUsable ? null : _handleIdCheck,
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .signup_id_duplicate_btn,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SignUpPadding(
-                        child: TextFormFieldStyle(
-                          obscure: !passwordVisible,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            },
-                            icon: Icon(
-                              passwordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                          ),
-                          label: AppLocalizations.of(context)!.password,
-                          errorTxt: _passwordErrorText,
-                          focusNode: _pwFocusNode,
-                          onChanged: ((value) {
-                            setState(() {
-                              password = value;
-                            });
-                          }),
-                          validator: (value) {
-                            return value == null ||
-                                    value.isEmpty ||
-                                    !passwordRegex.hasMatch(value)
-                                ? AppLocalizations.of(context)!
-                                    .signup_pw_invalid
-                                : null;
-                          },
-                        ),
-                      ),
-                      SignUpPadding(
-                        child: TextFormFieldStyle(
-                          obscure: !passwordCheckVisible,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                passwordCheckVisible = !passwordCheckVisible;
-                              });
-                            },
-                            icon: Icon(
-                              passwordCheckVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                          ),
-                          label: AppLocalizations.of(context)!.passwordCheck,
-                          errorTxt: _pwChFocusNode.hasFocus &&
-                                  password != passwordCheck
-                              ? AppLocalizations.of(context)!
-                                  .signup_pwCh_invalid
-                              : null,
-                          focusNode: _pwChFocusNode,
-                          onChanged: ((value) {
-                            setState(() {
-                              passwordCheck = value;
-                            });
-                          }),
-                          validator: (value) {
-                            return value == null ||
-                                    value.isEmpty ||
-                                    password != passwordCheck
-                                ? AppLocalizations.of(context)!
-                                    .signup_pwCh_invalid
-                                : null;
-                          },
-                        ),
-                      ),
-                      SignUpPadding(
-                        child: RowWithHeight(
-                          children: [
-                            Expanded(
-                              child: TextFormFieldStyle(
-                                obscure: false,
-                                readOnly: emailAuthrizationCode.isNotEmpty,
-                                suffixIcon: emailAuthrizationCheck
-                                    ? Icon(Icons.check, color: Colors.green)
-                                    : null,
-                                label:
-                                    AppLocalizations.of(context)!.signup_email,
-                                onChanged: (value) {
-                                  setState(() {
-                                    email = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: emailAuthrizationCheck
-                                    ? null
-                                    : _handleEmailCheck,
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .signup_authrization,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      emailAuthrizationCode.isNotEmpty &&
-                              !emailAuthrizationCheck
-                          ? SignUpPadding(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      onChanged: (value) {
-                                        setState(() {
-                                          emailCodeInputValue = value;
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                        border: UnderlineInputBorder(),
-                                        label: Text(
-                                            AppLocalizations.of(context)!
-                                                .signup_emailCode_input),
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: _emailCodeCheck,
-                                    child: Text(
-                                        AppLocalizations.of(context)!.check),
-                                  )
-                                ],
-                              ),
-                            )
-                          : SizedBox(),
-                      SignUpPadding(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Checkbox(
-                                  value: termsAgreement,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      termsAgreement = value!;
-                                    });
-                                  },
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .signup_terms_agree,
-                                ),
-                              ],
-                            ),
-                            OutlinedButton(
-                              onPressed: _handleCheckTermsAgreement,
-                              child: Text('내용 보기'),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: termsAgreement && _formKey.currentState!.validate()
-                      ? _handleSignupSubmit
-                      : null,
-                  child: Text(AppLocalizations.of(context)!.signup_btn),
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: child,
       ),
     );
   }

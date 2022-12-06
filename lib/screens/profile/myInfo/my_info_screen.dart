@@ -49,24 +49,28 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
     Navigator.popUntil(context, ModalRoute.withName(Routes.landing));
   }
 
+  Widget child(AuthState state) {
+    return Scaffold(
+      appBar: GlobalAppbar(),
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Text('가입 이메일: $email'),
+            ElevatedButton(onPressed: handleLogout, child: Text('로그아웃')),
+            ElevatedButton(onPressed: () {}, child: Text('회원탈퇴')),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AuthBlocConsumer(
       loaded: handleLoaded,
       initial: handleInitial,
-      child: Scaffold(
-        appBar: GlobalAppbar(),
-        body: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Text('가입 이메일: $email'),
-              ElevatedButton(onPressed: handleLogout, child: Text('로그아웃')),
-              ElevatedButton(onPressed: () {}, child: Text('회원탈퇴')),
-            ],
-          ),
-        ),
-      ),
+      child: child,
     );
   }
 }
