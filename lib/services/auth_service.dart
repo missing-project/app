@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:missing_application/config.dart';
-import 'package:missing_application/models/case_model.dart';
 
 class AuthEndpoint {
   static String idCheck = '/guest/checkid';
+  static String idSearch = '/guest/searchId';
   static String emailCheck = '/guest/authmail';
   static String signup = '/guest/register';
   static String signIn = '/guest/login';
@@ -38,6 +37,20 @@ class AuthService {
       return response.data;
     } else {
       throw Exception('Failed to check id');
+    }
+  }
+
+  static Future searchIdByEmail(String email) async {
+    final response = await HttpConfig.post(
+      AuthEndpoint.idSearch,
+      {
+        'email': email,
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.data;
+    } else {
+      throw Exception('Failed to search id');
     }
   }
 

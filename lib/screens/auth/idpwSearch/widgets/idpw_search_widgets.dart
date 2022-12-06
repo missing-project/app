@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:missing_application/blocs/auth/auth_bloc.dart';
+import 'package:missing_application/screens/auth/signup/widgets/signup_widgets.dart';
+import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IdSearch extends StatefulWidget {
   const IdSearch({super.key});
@@ -11,8 +16,17 @@ class _IdSearchState extends State<IdSearch> {
   String email = '';
   String idInqured = '';
 
-  @override
-  Widget build(BuildContext context) {
+  void handleSearchId() {
+    BlocProvider.of<AuthBloc>(context).add(IdSearchByEmail(email: email));
+  }
+
+  void handleIdsearchState(String uid) {
+    setState(() {
+      idInqured = uid;
+    });
+  }
+
+  Widget child(AuthState state) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
       child: Column(
@@ -36,7 +50,8 @@ class _IdSearchState extends State<IdSearch> {
                 SizedBox(
                   height: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed:
+                        emailRegExp.hasMatch(email) ? handleSearchId : null,
                     child: Text('조회'),
                   ),
                 )
@@ -53,6 +68,14 @@ class _IdSearchState extends State<IdSearch> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthBlocConsumer(
+      child: child,
+      idsearch: handleIdsearchState,
+    );
+  }
 }
 
 class PwSearch extends StatefulWidget {
@@ -63,12 +86,73 @@ class PwSearch extends StatefulWidget {
 }
 
 class _PwSearchState extends State<PwSearch> {
-  String id = '';
+  final _pwFocusNode = FocusNode();
+  final _pwChFocusNode = FocusNode();
+  String email = '';
+  String codeSend = '';
+  String codeInput = '';
+  bool emailCheckCompleted = false;
   String password = '';
   String passwordCheck = '';
+  bool passwordVisible = false;
+  bool passwordCheckVisible = false;
 
-  @override
-  Widget build(BuildContext context) {
+  String? get _passwordErrorText {
+    if (_pwFocusNode.hasFocus && !passwordRegex.hasMatch(password)) {
+      return AppLocalizations.of(context)!.signup_pw_regex;
+    }
+
+    return null;
+  }
+
+  void handleSendEmail() {
+    if (email.isNotEmpty && emailRegExp.hasMatch(email)) {
+      BlocProvider.of<AuthBloc>(context).add(EmailCheck(email: email));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: AppLocalizations.of(context)!.signup_email_regExp,
+          );
+        },
+      );
+    }
+  }
+
+  void handleEmailCheck(String authCode) {
+    setState(() {
+      codeSend = authCode;
+    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialogCustom(
+          content: AppLocalizations.of(context)!.signup_emailCode_send,
+        );
+      },
+    );
+  }
+
+  void handleCodeCheck() {
+    bool isCorrect = (codeSend == codeInput);
+    setState(() {
+      emailCheckCompleted = isCorrect;
+    });
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialogCustom(
+            content: isCorrect
+                ? AppLocalizations.of(context)!.signup_emailCode_correct
+                : AppLocalizations.of(context)!.signup_emailCode_incorrect,
+          );
+        });
+  }
+
+  void handlePasswordChange() {}
+
+  Widget child(AuthState state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -79,61 +163,120 @@ class _PwSearchState extends State<PwSearch> {
               children: [
                 SizedBox(height: 25),
                 SizeInListView(
-                  child: TextFieldStyle(
-                    label: '아이디',
-                    onChanged: (value) {
-                      setState(() {});
-                    },
+                  child: SizedBox(
+                    height: 60,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormFieldStyle(
+                            obscure: false,
+                            readOnly: codeSend.isNotEmpty,
+                            suffixIcon: emailCheckCompleted
+                                ? Icon(Icons.check, color: Colors.green)
+                                : null,
+                            label: AppLocalizations.of(context)!.signup_email,
+                            onChanged: (value) {
+                              setState(() {
+                                email = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: double.infinity,
+                          child: ElevatedButton(
+                            onPressed:
+                                emailCheckCompleted ? null : handleSendEmail,
+                            child: Text(
+                              AppLocalizations.of(context)!.signup_authrization,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizeInListView(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFieldStyle(
-                          label: '이메일',
-                          onChanged: (value) {},
-                        ),
-                      ),
-                      SizedBox(
-                        height: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('전송'),
+                codeSend.isNotEmpty && !emailCheckCompleted
+                    ? SizeInListView(
+                        child: SizedBox(
+                          height: 60,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      codeInput = value;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    label: Text(AppLocalizations.of(context)!
+                                        .signup_emailCode_input),
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: handleCodeCheck,
+                                child:
+                                    Text(AppLocalizations.of(context)!.check),
+                              )
+                            ],
+                          ),
                         ),
                       )
-                    ],
-                  ),
-                ),
+                    : SizedBox(),
                 SizeInListView(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFieldStyle(
-                          label: '인증코드',
-                          onChanged: (value) {},
-                        ),
+                  child: TextFormFieldStyle(
+                    obscure: !passwordVisible,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          passwordVisible = !passwordVisible;
+                        });
+                      },
+                      icon: Icon(
+                        passwordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
-                      SizedBox(
-                        height: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('인증'),
-                        ),
-                      )
-                    ],
+                    ),
+                    label: AppLocalizations.of(context)!.password,
+                    errorTxt: _passwordErrorText,
+                    focusNode: _pwFocusNode,
+                    onChanged: ((value) {
+                      setState(() {
+                        password = value;
+                      });
+                    }),
                   ),
                 ),
                 SizeInListView(
-                  child: TextFieldStyle(
-                    label: '새 비밀번호',
-                    onChanged: (value) {},
-                  ),
-                ),
-                SizeInListView(
-                  child: TextFieldStyle(
-                    label: '새 비밀번호 확인',
-                    onChanged: (value) {},
+                  child: TextFormFieldStyle(
+                    obscure: !passwordCheckVisible,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          passwordCheckVisible = !passwordCheckVisible;
+                        });
+                      },
+                      icon: Icon(
+                        passwordCheckVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
+                    label: AppLocalizations.of(context)!.passwordCheck,
+                    errorTxt:
+                        _pwChFocusNode.hasFocus && password != passwordCheck
+                            ? AppLocalizations.of(context)!.signup_pwCh_invalid
+                            : null,
+                    focusNode: _pwChFocusNode,
+                    onChanged: ((value) {
+                      setState(() {
+                        passwordCheck = value;
+                      });
+                    }),
                   ),
                 ),
               ],
@@ -143,11 +286,23 @@ class _PwSearchState extends State<PwSearch> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: emailCheckCompleted &&
+                    password.isNotEmpty &&
+                    (password == passwordCheck)
+                ? handlePasswordChange
+                : null,
             child: Text('비밀번호 변경'),
           ),
         )
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthBlocConsumer(
+      child: child,
+      emailCheck: handleEmailCheck,
     );
   }
 }
@@ -162,11 +317,8 @@ class SizeInListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: SizedBox(
-        height: 60,
-        child: child,
-      ),
+      padding: EdgeInsets.only(bottom: 20),
+      child: child,
     );
   }
 }

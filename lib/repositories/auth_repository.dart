@@ -35,6 +35,11 @@ class AuthRepository {
     return rsp['isUsable'];
   }
 
+  Future<String?> idSearch(String email) async {
+    final rsp = await AuthService.searchIdByEmail(email);
+    return rsp['id'];
+  }
+
   Future<String> emailCheck(String email) async {
     final rsp = await AuthService.sendEmailAuthizationCode(email);
     return rsp['code'].toString();
