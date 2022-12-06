@@ -40,8 +40,6 @@ class EmailCheck extends AuthEvent {
   EmailCheck({required this.email});
 }
 
-class GetUser extends AuthEvent {}
-
 class BookMarkAdd extends AuthEvent {
   final Case element;
   BookMarkAdd({required this.element});

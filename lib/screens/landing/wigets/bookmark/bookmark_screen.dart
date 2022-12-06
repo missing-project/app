@@ -13,46 +13,32 @@ class BookmarkScreen extends StatefulWidget {
 }
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
-  bool isLogin = false;
-  List<Case> bookmarks = [];
-  void handleLoaded(_, List<Case> bookmarklist) {
-    setState(() {
-      isLogin = true;
-      bookmarks = bookmarklist;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<AuthBloc>(context).add(GetUser());
+  Widget child(AuthState state) {
+    return state is AuthLoaded
+        ? state.bookmarks.isEmpty
+            ? Center(child: Text('저장된 데이터가 없습니다'))
+            : ListView(
+                children: state.bookmarks.map((el) {
+                  return CaseRowCard(
+                    detail: el,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              )
+        : Center(
+            child: Text(
+              '로그인 해야\n\n이용할 수 있습니다',
+              textAlign: TextAlign.center,
+            ),
+          );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AuthBlocConsumer(
-      loaded: handleLoaded,
-      child: !isLogin
-          ? Center(
-              child: Text(
-                '로그인 해야\n\n이용할 수 있습니다',
-                textAlign: TextAlign.center,
-              ),
-            )
-          : bookmarks.isEmpty
-              ? Center(child: Text('저장된 데이터가 없습니다'))
-              : ListView(
-                  children: bookmarks.map((el) {
-                    return CaseRowCard(
-                      detail: el,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.black,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-    );
+    return AuthBlocConsumer(child: child);
   }
 }

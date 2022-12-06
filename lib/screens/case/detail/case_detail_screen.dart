@@ -27,17 +27,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
     '080': '불상(기타)',
   };
 
-  bool isLogin = false;
-  List<Case> bookmarks = [];
-
-  void handleLoaded(_, List<Case> bookmarklist) {
-    setState(() {
-      isLogin = true;
-      bookmarks = bookmarklist;
-    });
-  }
-
-  void handleBookmark(Case element, bool isBookMark) {
+  void handleBookmark(Case element, bool isBookMark, bool isLogin) {
     if (isLogin) {
       BlocProvider.of<AuthBloc>(context).add(
         isBookMark
@@ -64,67 +54,65 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<AuthBloc>(context).add(GetUser());
+  Widget child(AuthState state) {
+    final detail = ModalRoute.of(context)!.settings.arguments as Case;
+    bool isLogin = state is AuthLoaded;
+    bool isBookMark = isLogin
+        ? state.bookmarks.indexWhere((el) => el.id == detail.id) > -1
+        : false;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('detail'),
+      ),
+      body: Column(
+        children: [
+          Hero(
+            tag: detail.id,
+            child: ImageBuilder(url: detail.image),
+          ),
+          SizedBox(
+            height: 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    handleBookmark(detail, isBookMark, isLogin);
+                  },
+                  icon: Icon(
+                    isBookMark ? Icons.bookmark : Icons.bookmark_outline,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                DetailPropety(property: '이름', value: detail.name),
+                DetailPropety(
+                  property: '대상',
+                  value: target[detail.targetCode] ?? '불상(기타)',
+                ),
+                DetailPropety(
+                  property: '실종 날짜',
+                  value: detail.date,
+                ),
+                DetailPropety(property: '실종 장소', value: detail.place),
+                DetailPropety(property: '당시 나이', value: detail.age),
+                DetailPropety(property: '현재 나이', value: detail.ageNow),
+                DetailPropety(property: '의상 차림', value: detail.dress),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final detail = ModalRoute.of(context)!.settings.arguments as Case;
-    bool isBookMark = bookmarks.indexWhere((el) => el.id == detail.id) > -1;
-    return AuthBlocConsumer(
-      loaded: handleLoaded,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('detail'),
-        ),
-        body: Column(
-          children: [
-            Hero(
-              tag: detail.id,
-              child: ImageBuilder(url: detail.image),
-            ),
-            SizedBox(
-              height: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      handleBookmark(detail, isBookMark);
-                    },
-                    icon: Icon(
-                      isBookMark ? Icons.bookmark : Icons.bookmark_outline,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                children: [
-                  DetailPropety(property: '이름', value: detail.name),
-                  DetailPropety(
-                    property: '대상',
-                    value: target[detail.targetCode] ?? '불상(기타)',
-                  ),
-                  DetailPropety(
-                    property: '실종 날짜',
-                    value: detail.date,
-                  ),
-                  DetailPropety(property: '실종 장소', value: detail.place),
-                  DetailPropety(property: '당시 나이', value: detail.age),
-                  DetailPropety(property: '현재 나이', value: detail.ageNow),
-                  DetailPropety(property: '의상 차림', value: detail.dress),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    return AuthBlocConsumer(child: child);
   }
 }
 

@@ -23,7 +23,7 @@ class AuthRepository {
     final token = prefs.getString(PreferencesKey.refreshtoken) ?? '';
     if (token.isNotEmpty && token != 'null') {
       final rsp = await AuthService.loginRemember();
-      currentUser = User.fromJson(rsp);
+      currentUser = User.fromJson(rsp['user']);
       return true;
     } else {
       return false;

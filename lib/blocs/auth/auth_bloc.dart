@@ -16,7 +16,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<IdCheck>(_idCheck);
     on<EmailCheck>(_emailCheck);
     on<Signup>(_signUp);
-    on<GetUser>(_getMe);
     on<BookMarkAdd>(_bookMarkAdd);
     on<BookMarkDel>(_bookMarkDel);
     on<Logout>(_onLogout);
@@ -39,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLoginAuto(LoginAuto event, Emitter<AuthState> emit) async {
     try {
       final isSuccess = await repository.signInAuto();
+      await repository.bookmarkGet();
       if (isSuccess) {
         return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
       } else {
@@ -74,14 +74,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return emit(AuthSignUp(isSuccess));
     } on Exception catch (err) {
       return emit(AuthError(err));
-    }
-  }
-
-  Future<void> _getMe(GetUser event, Emitter<AuthState> emit) async {
-    if (repository.currentUser.email.isNotEmpty) {
-      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
-    } else {
-      return emit(AuthInitial());
     }
   }
 
