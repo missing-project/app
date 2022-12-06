@@ -21,7 +21,7 @@ class AuthService {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
+      return response.data;
     } else {
       throw Exception('Failed to login');
     }
@@ -35,7 +35,7 @@ class AuthService {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
+      return response.data;
     } else {
       throw Exception('Failed to check id');
     }
@@ -49,7 +49,7 @@ class AuthService {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
+      return response.data;
     } else {
       throw Exception('Failed to send code');
     }
@@ -70,7 +70,7 @@ class AuthService {
 
   static Future<List<dynamic>> findBookmarks() async {
     final response = await HttpConfigAuthorized.get(AuthEndpoint.bookmark);
-    return jsonDecode(response.body);
+    return response.data;
   }
 
   static Future createBookmark(String id) async {
