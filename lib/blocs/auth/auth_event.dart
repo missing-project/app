@@ -34,6 +34,11 @@ class IdCheck extends AuthEvent {
   IdCheck({required this.id});
 }
 
+class IdSearchByEmail extends AuthEvent {
+  final String email;
+  IdSearchByEmail({required this.email});
+}
+
 class EmailCheck extends AuthEvent {
   final String email;
 
