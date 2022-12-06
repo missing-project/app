@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<Login>(_onLogin);
     on<LoginAuto>(_onLoginAuto);
     on<IdCheck>(_idCheck);
+    on<IdSearchByEmail>(_idSearch);
     on<EmailCheck>(_emailCheck);
     on<Signup>(_signUp);
     on<BookMarkAdd>(_bookMarkAdd);
@@ -53,6 +54,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isUsable = await repository.idCheck(event.id);
       return emit(AuthIdCheck(isUsable));
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _idSearch(IdSearchByEmail event, Emitter<AuthState> emit) async {
+    try {
+      final uid = await repository.idSearch(event.email);
+      await Future.delayed(const Duration(seconds: 2));
+      return emit(AuthIdSearch(uid ?? ''));
     } on Exception catch (err) {
       return emit(AuthError(err));
     }

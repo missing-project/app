@@ -27,6 +27,11 @@ class AuthIdCheck extends AuthState {
   AuthIdCheck(this.isUsable);
 }
 
+class AuthIdSearch extends AuthState {
+  final String uid;
+  AuthIdSearch(this.uid);
+}
+
 class AuthEmailCheck extends AuthState {
   final String code;
   AuthEmailCheck(this.code);
