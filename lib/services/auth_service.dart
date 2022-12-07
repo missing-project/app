@@ -8,8 +8,8 @@ class AuthEndpoint {
   static String signIn = '/guest/login';
   static String bookmark = '/bookmark';
   static String remember = '/user/remember';
-  static String changePassword = '/guest/changePassword';
   static String resetPassword = '/guest/resetPassword';
+  static String changePassword = '/user/changePassword';
 }
 
 class AuthService {
@@ -122,6 +122,16 @@ class AuthService {
       {
         "uid": uid,
         "email": email,
+      },
+    );
+  }
+
+  static Future changePassword(String prev, String curr) async {
+    await HttpConfigAuthorized.post(
+      AuthEndpoint.changePassword,
+      {
+        "prevPassword": prev,
+        "currPassword": curr,
       },
     );
   }
