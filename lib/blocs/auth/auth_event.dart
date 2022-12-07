@@ -70,3 +70,9 @@ class PasswordReset extends AuthEvent {
   final String email;
   PasswordReset({required this.uid, required this.email});
 }
+
+class PasswordChange extends AuthEvent {
+  final String prev;
+  final String curr;
+  PasswordChange({required this.prev, required this.curr});
+}
