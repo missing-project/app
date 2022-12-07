@@ -76,7 +76,11 @@ class AuthRepository {
     await AuthService.changeUserInfo(userInfo);
   }
 
-  Future resetpassword(String uid, String email) async {
+  Future resetPassword(String uid, String email) async {
     await AuthService.resetPassword(uid, email);
+  }
+
+  Future changePassword(String prev, String curr) async {
+    await AuthService.changePassword(prev, curr);
   }
 }

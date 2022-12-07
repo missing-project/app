@@ -23,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<Signout>(_onSignout);
     on<UserInfoChange>(_onUserInfoChange);
     on<PasswordReset>(_onPasswordReset);
+    on<PasswordChange>(_onPasswordChange);
   }
 
   void _onLoading(AuthEvent event, Emitter<AuthState> emit) =>
@@ -130,9 +131,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onPasswordReset(
       PasswordReset event, Emitter<AuthState> emit) async {
     try {
-      await repository.resetpassword(event.uid, event.email);
+      await repository.resetPassword(event.uid, event.email);
       await Future.delayed(const Duration(seconds: 2));
       return emit(AuthInitial());
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
+  }
+
+  Future<void> _onPasswordChange(
+      PasswordChange event, Emitter<AuthState> emit) async {
+    try {
+      await repository.changePassword(event.prev, event.curr);
+      return emit(AuthLoaded(repository.currentUser, repository.bookmarks));
     } on Exception catch (err) {
       return emit(AuthError(err));
     }

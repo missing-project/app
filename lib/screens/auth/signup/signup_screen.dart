@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/routes.dart';
-import 'package:missing_application/screens/auth/signup/widgets/signup_widgets.dart';
+import 'package:missing_application/screens/auth/signup/signup_widgets.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
 import 'package:missing_application/screens/global/global_appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
