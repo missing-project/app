@@ -1,5 +1,4 @@
 import 'package:missing_application/config.dart';
-// import 'package:missing_application/models/case_model.dart';
 
 class CaseEndpoint {
   static String caseList = '/case';
