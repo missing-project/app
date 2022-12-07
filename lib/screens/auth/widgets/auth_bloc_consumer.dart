@@ -12,7 +12,6 @@ class AuthBlocConsumer extends StatefulWidget {
     this.loaded,
     this.idCheck,
     this.emailCheck,
-    this.signup,
     this.initial,
     this.idsearch,
   });
@@ -21,7 +20,6 @@ class AuthBlocConsumer extends StatefulWidget {
   final Function(User, List<Case>)? loaded;
   final Function(bool)? idCheck;
   final Function(String)? emailCheck;
-  final Function(bool)? signup;
   final Function? initial;
   final Function(String)? idsearch;
 
@@ -40,7 +38,7 @@ class _AuthBlocConsumerState extends State<AuthBlocConsumer> {
               .showSnackBar(SnackBar(content: Text('${state.error}')));
         }
 
-        if (state is AuthLoaded && widget.idCheck != null) {
+        if (state is AuthLoaded && widget.loaded != null) {
           widget.loaded!(state.user, state.bookmarks);
         }
 
@@ -50,10 +48,6 @@ class _AuthBlocConsumerState extends State<AuthBlocConsumer> {
 
         if (state is AuthEmailCheck && widget.emailCheck != null) {
           widget.emailCheck!(state.code);
-        }
-
-        if (state is AuthSignUp && widget.signup != null) {
-          widget.signup!(state.isComplete);
         }
 
         if (state is AuthInitial && widget.initial != null) {

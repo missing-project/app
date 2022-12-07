@@ -64,3 +64,9 @@ class UserInfoChange extends AuthEvent {
   final String? password;
   UserInfoChange({this.email, this.password});
 }
+
+class PasswordReset extends AuthEvent {
+  final String uid;
+  final String email;
+  PasswordReset({required this.uid, required this.email});
+}

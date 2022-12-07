@@ -175,18 +175,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .add(Signup(id: id, email: email, password: password));
   }
 
-  void _signupComplete(bool isComplete) {
+  void _signupComplete() {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialogCustom(
-            content: isComplete ? '회원가입 성공' : '회원가입 실패',
-            action: isComplete
-                ? () {
-                    Navigator.popUntil(
-                        context, ModalRoute.withName(Routes.login));
-                  }
-                : null,
+            content: '회원가입 성공',
+            action: () {
+              Navigator.popUntil(context, ModalRoute.withName(Routes.login));
+            },
           );
         });
   }
@@ -396,7 +393,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: termsAgreement && _formKey.currentState!.validate()
+              onPressed: termsAgreement &&
+                      _formKey.currentState!.validate() &&
+                      state is! AuthLoading
                   ? _handleSignupSubmit
                   : null,
               child: Text(AppLocalizations.of(context)!.signup_btn),
@@ -412,10 +411,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: GlobalAppbar(),
       body: AuthBlocConsumer(
-        loaded: (_, __) {},
         idCheck: _idCheckState,
         emailCheck: _emailCheckState,
-        signup: _signupComplete,
+        initial: _signupComplete,
         child: child,
       ),
     );

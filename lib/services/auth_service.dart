@@ -9,6 +9,7 @@ class AuthEndpoint {
   static String bookmark = '/bookmark';
   static String remember = '/user/remember';
   static String changePassword = '/guest/changePassword';
+  static String resetPassword = '/guest/resetPassword';
 }
 
 class AuthService {
@@ -113,5 +114,15 @@ class AuthService {
 
   static Future changeUserInfo(Map<String, dynamic> userInfo) async {
     await HttpConfig.post(AuthEndpoint.changePassword, userInfo);
+  }
+
+  static Future resetPassword(String uid, String email) async {
+    await HttpConfig.post(
+      AuthEndpoint.resetPassword,
+      {
+        "uid": uid,
+        "email": email,
+      },
+    );
   }
 }

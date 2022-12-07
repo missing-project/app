@@ -45,9 +45,8 @@ class AuthRepository {
     return rsp['code'].toString();
   }
 
-  Future<bool> signUp(String id, String email, String password) async {
-    final isSuccess = await AuthService.createUser(id, email, password);
-    return isSuccess;
+  Future signUp(String id, String email, String password) async {
+    await AuthService.createUser(id, email, password);
   }
 
   Future bookmarkGet() async {
@@ -75,5 +74,9 @@ class AuthRepository {
 
   Future userInfoChange(Map<String, dynamic> userInfo) async {
     await AuthService.changeUserInfo(userInfo);
+  }
+
+  Future resetpassword(String uid, String email) async {
+    await AuthService.resetPassword(uid, email);
   }
 }
