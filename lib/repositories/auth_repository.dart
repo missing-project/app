@@ -72,6 +72,10 @@ class AuthRepository {
     bookmarks = [];
   }
 
+  Future signout() async {
+    await AuthService.deleteMe();
+  }
+
   Future userInfoChange(Map<String, dynamic> userInfo) async {
     await AuthService.changeUserInfo(userInfo);
   }

@@ -58,7 +58,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                   child: Text('취소')),
               TextButton(
                   onPressed: () {
-                    // BlocProvider.of<AuthBloc>(context).add(Logout());
+                    BlocProvider.of<AuthBloc>(context).add(Signout());
                     Navigator.pop(context);
                   },
                   child: Text('확인')),
