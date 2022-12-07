@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _handleLoginBtn,
+                onPressed: state is AuthLoading ? null : _handleLoginBtn,
                 child: Text(
                   AppLocalizations.of(context)!.login_button,
                   style: TextStyle(
