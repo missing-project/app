@@ -29,14 +29,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
           fontFamily: 'ChosunGs',
-          // elevatedButtonTheme: ElevatedButtonThemeData(
-          //   style: ElevatedButton.styleFrom(
-          //     disabledBackgroundColor: Colors.grey[100],
-          //     disabledForegroundColor: Colors.grey[600],
-          //     backgroundColor: Theme.of(context).primaryColor,
-          //     foregroundColor: Colors.white,
-          //   ),
-          // ),
         ),
         initialRoute: '/',
         routes: routes,

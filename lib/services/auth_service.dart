@@ -10,6 +10,7 @@ class AuthEndpoint {
   static String remember = '/user/remember';
   static String resetPassword = '/guest/resetPassword';
   static String changePassword = '/user/changePassword';
+  static String signout = '/user/signout';
 }
 
 class AuthService {
@@ -134,5 +135,9 @@ class AuthService {
         "currPassword": curr,
       },
     );
+  }
+
+  static Future deleteMe() async {
+    await HttpConfigAuthorized.delete(AuthEndpoint.signout, {});
   }
 }
