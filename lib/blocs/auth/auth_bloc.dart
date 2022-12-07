@@ -113,7 +113,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return emit(AuthInitial());
   }
 
-  Future<void> _onSignout(Signout event, Emitter<AuthState> emit) async {}
+  Future<void> _onSignout(Signout event, Emitter<AuthState> emit) async {
+    try {
+      await repository.signout();
+      await repository.logout();
+      await Future.delayed(const Duration(seconds: 2));
+      return emit(AuthInitial());
+    } on Exception catch (err) {
+      return emit(AuthError(err));
+    }
+  }
 
   Future<void> _onUserInfoChange(
       UserInfoChange event, Emitter<AuthState> emit) async {
