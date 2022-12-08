@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:missing_application/blocs/appinfo/appinfo_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/blocs/case/case_bloc.dart';
 import 'package:missing_application/blocs/notice/notice_bloc.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthBloc(AuthRepository())),
         BlocProvider(create: (_) => CaseBloc(CaseRepository())),
         BlocProvider(create: (_) => NoticeBloc(NoticeRepository())),
+        BlocProvider(create: (_) => AppinfoBloc(AppinfoRepository())),
       ],
       child: MaterialApp(
         title: 'Missing',

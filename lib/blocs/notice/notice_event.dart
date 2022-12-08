@@ -8,3 +8,5 @@ abstract class NoticeEvent extends Equatable {
 }
 
 class GetNotice extends NoticeEvent {}
+
+class InitNotice extends NoticeEvent {}
