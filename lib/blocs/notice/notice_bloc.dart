@@ -11,6 +11,7 @@ class NoticeBloc extends Bloc<NoticeEvent, NoticeState> {
   NoticeBloc(this.repository) : super(NoticeInit()) {
     on<NoticeEvent>(_onLoading);
     on<GetNotice>(_getNoticeList);
+    on<InitNotice>(_initNoticeList);
   }
 
   void _onLoading(NoticeEvent event, Emitter<NoticeState> emit) =>
@@ -26,5 +27,10 @@ class NoticeBloc extends Bloc<NoticeEvent, NoticeState> {
     } on Exception catch (err) {
       return emit(NoticeError(err));
     }
+  }
+
+  Future<void> _initNoticeList(
+      InitNotice event, Emitter<NoticeState> emit) async {
+    return emit(NoticeInit());
   }
 }
