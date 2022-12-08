@@ -3,9 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
 class HttpConfig {
-  static String serverUrl = 'http://10.0.2.2:8989'; // android
+  // static String serverUrl = 'http://10.0.2.2:8989'; // android
   // static String serverUrl = 'http://localhost:8989'; // ios
-  // static String serverUrl = 'http://13.209.238.196:8989'; // aws
+  static String serverUrl = 'http://13.209.238.196:8989'; // aws
 
   static final Dio _dioUnauthorized = Dio(
     BaseOptions(

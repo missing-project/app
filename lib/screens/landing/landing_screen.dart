@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/appinfo/appinfo_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:missing_application/screens/landing/wigets/bookmark/bookmark_scr
 import 'package:missing_application/screens/landing/wigets/home/home_screen.dart';
 import 'package:missing_application/screens/landing/wigets/map/map_screen.dart';
 import 'package:missing_application/screens/landing/wigets/profile/profile_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -59,7 +62,15 @@ class _LandingScreenState extends State<LandingScreen>
                   actions: [
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        if (Platform.isIOS &&
+                            state.info.appstoreLink!.isNotEmpty) {
+                          launchUrl(Uri.parse(state.info.appstoreLink!));
+                        }
+
+                        if (Platform.isAndroid &&
+                            state.info.playstoreLink!.isNotEmpty) {
+                          launchUrl(Uri.parse(state.info.playstoreLink!));
+                        }
                       },
                       child: Text('확인'),
                     ),
