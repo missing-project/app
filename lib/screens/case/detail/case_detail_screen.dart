@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
-import 'package:missing_application/models/auth_model.dart';
 import 'package:missing_application/models/case_model.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
 import 'package:missing_application/screens/global/image_builder.dart';

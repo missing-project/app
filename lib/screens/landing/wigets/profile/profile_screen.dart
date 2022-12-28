@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/models/auth_model.dart';
 import 'package:missing_application/routes.dart';
