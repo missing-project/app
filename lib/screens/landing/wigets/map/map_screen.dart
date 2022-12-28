@@ -80,13 +80,19 @@ class _MapScreenState extends State<MapScreen> {
 
     // 권한이 없을 때 리턴값이 오지 않는 에러가 있음
     LocationData userLocation = await location.getLocation();
-    _animateCamera(LatLng(userLocation.longitude!, userLocation.latitude!));
+    final long = userLocation.longitude!;
+    final lat = userLocation.latitude!;
+
+    // 대한민국 범위 적용
+    if (long > 32 && long < 44 && lat > 123 && lat < 133) {
+      _animateCamera(LatLng(long, lat));
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    // _locateCheck();
+    _locateCheck();
     BlocProvider.of<CaseBloc>(context).add(CaseList());
   }
 
