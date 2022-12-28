@@ -121,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           titlePadding: EdgeInsets.all(10),
           contentPadding: EdgeInsets.all(5),
           actionsPadding: EdgeInsets.all(5),
-          title: Text('개인정보 처리방침'),
+          title: Text(AppLocalizations.of(context)!.signup_personalinfo),
           content: Container(
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
@@ -152,7 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
         builder: (context) {
           return AlertDialogCustom(
-            content: '아이디 중복을 검사하세요',
+            content: AppLocalizations.of(context)!.signup_id_alert,
           );
         },
       );
@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
         builder: (context) {
           return AlertDialogCustom(
-            content: '이메일을 인증하세요',
+            content: AppLocalizations.of(context)!.signup_email_alert,
           );
         },
       );
@@ -180,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
         builder: (context) {
           return AlertDialogCustom(
-            content: '회원가입 성공',
+            content: AppLocalizations.of(context)!.signup_success,
             action: () {
               Navigator.popUntil(context, ModalRoute.withName(Routes.login));
             },
@@ -381,7 +381,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         OutlinedButton(
                           onPressed: _handleCheckTermsAgreement,
-                          child: Text('내용 보기'),
+                          child: Text(AppLocalizations.of(context)!
+                              .signup_policy_content),
                         )
                       ],
                     ),

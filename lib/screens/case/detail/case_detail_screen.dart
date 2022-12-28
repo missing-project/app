@@ -16,16 +16,6 @@ class CaseDetailScreen extends StatefulWidget {
 }
 
 class _CaseDetailScreenState extends State<CaseDetailScreen> {
-  final Map<String, String> target = {
-    '010': '정상아동(18세미만)',
-    '020': '가출인',
-    '040': '시설보호무연고자',
-    '060': '지적장애인',
-    '061': '지적장애인(18세미만)',
-    '062': '치매질환자',
-    '080': '불상(기타)',
-  };
-
   void handleBookmark(Case element, bool isBookMark, bool isLogin) {
     if (isLogin) {
       BlocProvider.of<AuthBloc>(context).add(
@@ -54,6 +44,15 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
   }
 
   Widget child(AuthState state) {
+    final Map<String, String> target = {
+      '010': AppLocalizations.of(context)!.case_010,
+      '020': AppLocalizations.of(context)!.case_020,
+      '040': AppLocalizations.of(context)!.case_040,
+      '060': AppLocalizations.of(context)!.case_060,
+      '061': AppLocalizations.of(context)!.case_061,
+      '062': AppLocalizations.of(context)!.case_062,
+      '080': AppLocalizations.of(context)!.case_080,
+    };
     final detail = ModalRoute.of(context)!.settings.arguments as Case;
     bool isLogin = state is AuthLoaded;
     bool isBookMark = isLogin
@@ -61,7 +60,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
         : false;
     return Scaffold(
       appBar: AppBar(
-        title: Text('detail'),
+        title: Text(AppLocalizations.of(context)!.case_detail_appbar),
       ),
       body: Column(
         children: [
@@ -88,19 +87,35 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
           Expanded(
             child: ListView(
               children: [
-                DetailPropety(property: '이름', value: detail.name),
                 DetailPropety(
-                  property: '대상',
-                  value: target[detail.targetCode] ?? '불상(기타)',
+                  property: AppLocalizations.of(context)!.case_detail_name,
+                  value: detail.name,
                 ),
                 DetailPropety(
-                  property: '실종 날짜',
+                  property: AppLocalizations.of(context)!.case_detail_target,
+                  value: target[detail.targetCode] ??
+                      AppLocalizations.of(context)!.case_080,
+                ),
+                DetailPropety(
+                  property: AppLocalizations.of(context)!.case_detail_date,
                   value: detail.date,
                 ),
-                DetailPropety(property: '실종 장소', value: detail.place),
-                DetailPropety(property: '당시 나이', value: detail.age),
-                DetailPropety(property: '현재 나이', value: detail.ageNow),
-                DetailPropety(property: '의상 차림', value: detail.dress),
+                DetailPropety(
+                  property: AppLocalizations.of(context)!.case_detail_place,
+                  value: detail.place,
+                ),
+                DetailPropety(
+                  property: AppLocalizations.of(context)!.case_detail_agePrev,
+                  value: detail.age,
+                ),
+                DetailPropety(
+                  property: AppLocalizations.of(context)!.case_detail_ageCurr,
+                  value: detail.ageNow,
+                ),
+                DetailPropety(
+                  property: AppLocalizations.of(context)!.case_detail_cloth,
+                  value: detail.dress,
+                ),
               ],
             ),
           )

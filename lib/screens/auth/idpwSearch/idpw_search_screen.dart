@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:missing_application/screens/auth/idpwSearch/widgets/idpw_search_widgets.dart';
 import 'package:missing_application/screens/global/global_appbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IdPwSearchScreen extends StatefulWidget {
   const IdPwSearchScreen({Key? key}) : super(key: key);
@@ -22,8 +23,8 @@ class _IdPwSearchScreenState extends State<IdPwSearchScreen> {
             TabBar(
               labelColor: Theme.of(context).primaryColor,
               tabs: [
-                Tab(text: '아이디 찾기'),
-                Tab(text: '비밀번호 찾기'),
+                Tab(text: AppLocalizations.of(context)!.idpw_tap_id),
+                Tab(text: AppLocalizations.of(context)!.idpw_tap_pw),
               ],
             ),
             Expanded(

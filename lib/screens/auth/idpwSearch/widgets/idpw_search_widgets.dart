@@ -39,7 +39,7 @@ class _IdSearchState extends State<IdSearch> {
               children: [
                 Expanded(
                   child: TextFieldStyle(
-                    label: '이메일',
+                    label: AppLocalizations.of(context)!.email,
                     onChanged: (value) {
                       setState(() {
                         email = value;
@@ -54,7 +54,7 @@ class _IdSearchState extends State<IdSearch> {
                         emailRegExp.hasMatch(email) && state is! AuthLoading
                             ? handleSearchId
                             : null,
-                    child: Text('조회'),
+                    child: Text(AppLocalizations.of(context)!.idpw_lookup),
                   ),
                 )
               ],
@@ -63,7 +63,9 @@ class _IdSearchState extends State<IdSearch> {
           SizedBox(height: 30),
           Center(
             child: Text(
-              idInqured.isEmpty ? '조회된 아이디가 없습니다' : '조회된 아이디: $idInqured',
+              idInqured.isEmpty
+                  ? AppLocalizations.of(context)!.idpw_result_none
+                  : '${AppLocalizations.of(context)!.idpw_result_id} $idInqured',
             ),
           )
         ],
@@ -101,7 +103,7 @@ class _PwSearchState extends State<PwSearch> {
       context: context,
       builder: (context) {
         return AlertDialogCustom(
-          content: '임시 비밀번호가 전송되었습니다',
+          content: AppLocalizations.of(context)!.idpw_pw_send,
           action: () {
             Navigator.popUntil(context, ModalRoute.withName(Routes.login));
           },
@@ -122,7 +124,7 @@ class _PwSearchState extends State<PwSearch> {
                 SizedBox(height: 25),
                 SizeInListView(
                   child: TextFieldStyle(
-                    label: '아이디',
+                    label: AppLocalizations.of(context)!.id,
                     onChanged: (value) {
                       setState(() {
                         id = value;
@@ -153,7 +155,7 @@ class _PwSearchState extends State<PwSearch> {
                     state is! AuthLoading
                 ? handlePasswordIssued
                 : null,
-            child: Text('임시 비밀번호 발급'),
+            child: Text(AppLocalizations.of(context)!.idpw_pw_btn),
           ),
         )
       ],
