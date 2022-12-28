@@ -17,12 +17,12 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   // 초기 위치: 서울
-  static double zoomInit = 13;
+  static double zoomInit = 12;
   List<Marker> _markers = [];
   Case selectedCase = Case.empty;
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(
-      37.498095,
+      37.508095,
       127.027610,
     ),
     zoom: zoomInit,
