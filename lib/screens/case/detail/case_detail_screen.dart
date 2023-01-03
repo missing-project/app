@@ -28,7 +28,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('로그인해야 이용할 수 있습니다'),
+            content: Text(AppLocalizations.of(context)!.case_detail_nologin),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -152,7 +152,11 @@ class DetailPropety extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 4,
               child: Text(property),
             ),
-            Text(value == 'null' ? '정보 없음' : value),
+            Text(
+              value == 'null'
+                  ? AppLocalizations.of(context)!.case_detail_nodata
+                  : value,
+            ),
           ],
         ),
       ),

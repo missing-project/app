@@ -47,7 +47,7 @@ class _PasswrodChangeDialogState extends State<PasswrodChangeDialog> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             MyinfoTextFieldStyle(
-                label: '현재 비밀번호',
+                label: AppLocalizations.of(context)!.myinfo_pw_curr,
                 obscure: !prevPasswordVisible,
                 suffixIcon: IconButton(
                   icon: Icon(prevPasswordVisible
@@ -65,7 +65,7 @@ class _PasswrodChangeDialogState extends State<PasswrodChangeDialog> {
                   });
                 }),
             MyinfoTextFieldStyle(
-                label: '새 비밀번호',
+                label: AppLocalizations.of(context)!.myinfo_pw_new,
                 obscure: !currPasswordVisible,
                 errorTxt: _passwordErrorText,
                 focusNode: _pwFocusNode,
@@ -85,7 +85,7 @@ class _PasswrodChangeDialogState extends State<PasswrodChangeDialog> {
                   });
                 }),
             MyinfoTextFieldStyle(
-                label: '새 비밀번호 확인',
+                label: AppLocalizations.of(context)!.myinfo_pw_new_check,
                 obscure: !currPasswordCheckVisible,
                 focusNode: _pwChFocusNode,
                 errorTxt:
@@ -114,7 +114,7 @@ class _PasswrodChangeDialogState extends State<PasswrodChangeDialog> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('취소')),
+                    child: Text(AppLocalizations.of(context)!.cancel)),
                 TextButton(
                     onPressed: prevPassword.isNotEmpty &&
                             currPassword.isNotEmpty &&
@@ -123,7 +123,7 @@ class _PasswrodChangeDialogState extends State<PasswrodChangeDialog> {
                             passwordRegex.hasMatch(currPassword)
                         ? handleChangePassword
                         : null,
-                    child: Text('변경')),
+                    child: Text(AppLocalizations.of(context)!.change)),
               ],
             )
           ],

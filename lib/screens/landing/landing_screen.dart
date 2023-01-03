@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/appinfo/appinfo_bloc.dart';
@@ -9,6 +8,7 @@ import 'package:missing_application/screens/landing/wigets/home/home_screen.dart
 import 'package:missing_application/screens/landing/wigets/map/map_screen.dart';
 import 'package:missing_application/screens/landing/wigets/profile/profile_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -25,13 +25,7 @@ class _LandingScreenState extends State<LandingScreen>
     BookmarkScreen(),
     ProfileScreen(),
   ];
-
-  static const List<String> _title = [
-    'Missing',
-    'Map',
-    'BookMark',
-    'Profile',
-  ];
+  String recentVersion = '0.1.1';
   int _selectedIndex = 0;
 
   @override
@@ -52,13 +46,17 @@ class _LandingScreenState extends State<LandingScreen>
     return BlocConsumer<AppinfoBloc, AppinfoState>(
       listenWhen: (previous, current) => ModalRoute.of(context)!.isCurrent,
       listener: (context, state) {
-        if (state is AppinfoLoaded && state.info.version != '0.1.1') {
+        if (state is AppinfoLoaded && state.info.version != recentVersion) {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('업데이트 알림'),
-                  content: Text('새로운 업데이트가 출시되었으니\n다운로드 부탁드립니다'),
+                  title: Text(
+                    AppLocalizations.of(context)!.landing_update_title,
+                  ),
+                  content: Text(
+                    AppLocalizations.of(context)!.landing_update_content,
+                  ),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -72,7 +70,7 @@ class _LandingScreenState extends State<LandingScreen>
                           launchUrl(Uri.parse(state.info.playstoreLink!));
                         }
                       },
-                      child: Text('확인'),
+                      child: Text(AppLocalizations.of(context)!.check),
                     ),
                   ],
                 );
@@ -80,12 +78,18 @@ class _LandingScreenState extends State<LandingScreen>
         }
       },
       builder: (context, state) {
+        List<String> title = [
+          AppLocalizations.of(context)!.landing_appbar_title_missing,
+          AppLocalizations.of(context)!.landing_appbar_title_map,
+          AppLocalizations.of(context)!.landing_appbar_title_bookmark,
+          AppLocalizations.of(context)!.landing_appbar_title_profile,
+        ];
         return Scaffold(
           appBar: PreferredSize(
             preferredSize:
                 _selectedIndex == 1 ? Size.zero : Size.fromHeight(40.0),
             child: AppBar(
-              title: Text(_title[_selectedIndex]),
+              title: Text(title[_selectedIndex]),
               centerTitle: false,
             ),
           ),

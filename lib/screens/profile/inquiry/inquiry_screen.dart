@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:missing_application/screens/global/global_appbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InquiryScreen extends StatefulWidget {
   const InquiryScreen({Key? key}) : super(key: key);
@@ -21,15 +22,15 @@ class _InquiryScreenState extends State<InquiryScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'missing 만든이',
+              AppLocalizations.of(context)!.inquiry_made,
               textAlign: TextAlign.center,
             ),
-            Text('손병진'),
-            Text('오승하'),
-            Text('한승주'),
-            Text('유상우'),
+            Text(AppLocalizations.of(context)!.inquiry_01),
+            Text(AppLocalizations.of(context)!.inquiry_02),
+            Text(AppLocalizations.of(context)!.inquiry_03),
+            Text(AppLocalizations.of(context)!.inquiry_04),
             Text(
-              '문의 이메일: sgyos000@gmail.com',
+              AppLocalizations.of(context)!.inquiry_email,
               textAlign: TextAlign.center,
             ),
           ],
