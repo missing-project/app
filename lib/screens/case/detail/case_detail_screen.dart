@@ -64,9 +64,14 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
       ),
       body: Column(
         children: [
-          Hero(
-            tag: detail.id,
-            child: ImageBuilder(url: detail.image),
+          Container(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height / 3,
+            ),
+            child: Hero(
+              tag: detail.id,
+              child: ImageBuilder(url: detail.image),
+            ),
           ),
           SizedBox(
             height: 20,
