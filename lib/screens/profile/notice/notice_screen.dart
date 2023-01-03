@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:missing_application/blocs/notice/notice_bloc.dart';
 import 'package:missing_application/screens/global/loading_stack.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NoticeScreen extends StatefulWidget {
   const NoticeScreen({super.key});
@@ -38,7 +39,11 @@ class _NoticeScreenState extends State<NoticeScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: Text('공지사항')),
+            appBar: AppBar(
+              title: Text(
+                AppLocalizations.of(context)!.notice_appbar_title,
+              ),
+            ),
             body: LoadingStack(
               isLoading: state is NoticeLoading,
               child: state is NoticeLoaded
@@ -70,7 +75,11 @@ class _NoticeScreenState extends State<NoticeScreen> {
                             .toList(),
                       ),
                     )
-                  : Center(child: Text('no data')),
+                  : Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.notice_nodata,
+                      ),
+                    ),
             ));
       },
     );

@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
     return CaseBlocConsumer(
       loaded: _caseLoaded,
       child: ListView(
@@ -49,12 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 15, left: 15),
                 child: Text(
                   AppLocalizations.of(context)!.section,
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 30),
                 ),
               ),
               SizedBox(
                 height: deviceHeight / 2,
-                width: deviceWidth,
                 child: CarouselSlider(
                   items: caseList.map((caseEl) {
                     return CaseImageCard(detail: caseEl);

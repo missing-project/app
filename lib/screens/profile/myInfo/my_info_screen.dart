@@ -4,6 +4,7 @@ import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/routes.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
 import 'package:missing_application/screens/profile/myInfo/my_info_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyInfoScreen extends StatefulWidget {
   const MyInfoScreen({Key? key}) : super(key: key);
@@ -26,19 +27,21 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('로그아웃 하시겠습니까?'),
+            content: Text(AppLocalizations.of(context)!.myinfo_logout_content),
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('취소')),
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               TextButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthBloc>(context).add(Logout());
-                    Navigator.pop(context);
-                  },
-                  child: Text('확인')),
+                child: Text(AppLocalizations.of(context)!.check),
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(Logout());
+                  Navigator.pop(context);
+                },
+              ),
             ],
           );
         });
@@ -49,19 +52,21 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('회원탈퇴 하시겠습니까?'),
+            content: Text(AppLocalizations.of(context)!.myinfo_signout_content),
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('취소')),
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               TextButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthBloc>(context).add(Signout());
-                    Navigator.pop(context);
-                  },
-                  child: Text('확인')),
+                child: Text(AppLocalizations.of(context)!.check),
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(Signout());
+                  Navigator.pop(context);
+                },
+              ),
             ],
           );
         });
@@ -76,13 +81,13 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('비밀번호가 변경되었습니다'),
+          content: Text(AppLocalizations.of(context)!.myinfo_changepw_complete),
           actions: [
             TextButton(
+              child: Text(AppLocalizations.of(context)!.check),
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('확인'),
             )
           ],
         );
@@ -92,7 +97,9 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
 
   Widget child(AuthState state) {
     return Scaffold(
-      appBar: AppBar(title: Text('내 정보')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.myinfo_appbar_title),
+      ),
       body: Padding(
         padding: EdgeInsets.all(10.0),
         child: Padding(
@@ -101,20 +108,30 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '가입 이메일: ${state is AuthLoaded ? state.user.email : ''}',
+                '${AppLocalizations.of(context)!.myinfo_email}: ${state is AuthLoaded ? state.user.email : ''}',
               ),
               SizedBox(height: 15),
               ElevatedButton(
                 onPressed: handleChangePassword,
-                child: Text('비밀번호 변경'),
+                child: Text(AppLocalizations.of(context)!.myinfo_btn_changepw),
               ),
               SizedBox(height: 30),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  TextButton(onPressed: handleLogout, child: Text('로그아웃')),
-                  TextButton(onPressed: handleSignout, child: Text('회원탈퇴')),
+                  TextButton(
+                    onPressed: handleLogout,
+                    child: Text(
+                      AppLocalizations.of(context)!.myinfo_btn_logout,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: handleSignout,
+                    child: Text(
+                      AppLocalizations.of(context)!.myinfo_btn_signout,
+                    ),
+                  ),
                 ],
               ),
             ],

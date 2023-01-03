@@ -10,12 +10,22 @@ class ImageBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (url.isEmpty || url == 'null') {
-      return Center(child: Icon(Icons.error_outline));
+      return Center(
+        child: Icon(
+          Icons.error_outline,
+          size: 50.0,
+        ),
+      );
     }
     return Image.network(
       url,
       errorBuilder: (context, error, stackTrace) {
-        return Center(child: Icon(Icons.error_outline));
+        return Center(
+          child: Icon(
+            Icons.error_outline,
+            size: 50.0,
+          ),
+        );
       },
     );
   }

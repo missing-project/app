@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:missing_application/blocs/auth/auth_bloc.dart';
 import 'package:missing_application/components/card/case_row_card.dart';
 import 'package:missing_application/screens/auth/widgets/auth_bloc_consumer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Widget child(AuthState state) {
     return state is AuthLoaded
         ? state.bookmarks.isEmpty
-            ? Center(child: Text('저장된 데이터가 없습니다'))
+            ? Center(child: Text(AppLocalizations.of(context)!.bookmark_nodata))
             : ListView(
                 children: state.bookmarks.map((el) {
                   return CaseRowCard(
@@ -29,7 +30,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               )
         : Center(
             child: Text(
-              '로그인 해야\n\n이용할 수 있습니다',
+              AppLocalizations.of(context)!.bookmark_nologin,
               textAlign: TextAlign.center,
             ),
           );
